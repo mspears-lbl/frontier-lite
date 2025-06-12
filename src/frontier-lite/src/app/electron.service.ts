@@ -1,0 +1,102 @@
+import { Injectable } from '@angular/core';
+
+export interface ElectronAPI {
+  sendMessage: (message: any) => void;
+  saveGeoJSON: (data: any) => Promise<{ success: boolean; filePath?: string; reason?: string }>;
+  loadGeoJSON: () => Promise<{ success: boolean; data?: any; reason?: string }>;
+  writeJsonToFile: (filePath: string, jsonData: any) => Promise<{ success: boolean; error?: string }>;
+  readJsonFromFile: (filePath: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+  listFiles: () => Promise<{ 
+    success: boolean; 
+    files?: Array<{
+      name: string;
+      isDirectory: boolean;
+      size: number;
+      modifiedTime: Date;
+    }>; 
+    error?: string 
+  }>;
+}
+
+declare global {
+  interface Window {
+    electronAPI: ElectronAPI;
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ElectronService {
+  private _isElectron: boolean = false;
+
+  constructor() {
+    this._isElectron = !!(window && window.electronAPI);
+  }
+
+  get isElectron(): boolean {
+    return this._isElectron;
+  }
+
+  sendMessage(message: any): void {
+    if (this.isElectron) {
+      window.electronAPI.sendMessage(message);
+    } else {
+      console.log('Not running in Electron, message not sent:', message);
+    }
+  }
+  
+  async saveGeoJSON(data: any): Promise<{ success: boolean; filePath?: string; reason?: string }> {
+    if (this.isElectron) {
+      return window.electronAPI.saveGeoJSON(data);
+    } else {
+      console.log('Not running in Electron, GeoJSON not saved:', data);
+      return { success: false, reason: 'Not running in Electron' };
+    }
+  }
+  
+  async loadGeoJSON(): Promise<{ success: boolean; data?: any; reason?: string }> {
+    if (this.isElectron) {
+      return window.electronAPI.loadGeoJSON();
+    } else {
+      console.log('Not running in Electron, GeoJSON not loaded');
+      return { success: false, reason: 'Not running in Electron' };
+    }
+  }
+  
+  async writeJsonToFile(filePath: string, jsonData: any): Promise<{ success: boolean; error?: string }> {
+    if (this.isElectron) {
+      return window.electronAPI.writeJsonToFile(filePath, jsonData);
+    } else {
+      console.log('Not running in Electron, JSON not written to file:', jsonData);
+      return { success: false, error: 'Not running in Electron' };
+    }
+  }
+  
+  async readJsonFromFile(filePath: string): Promise<{ success: boolean; data?: any; error?: string }> {
+    if (this.isElectron) {
+      return window.electronAPI.readJsonFromFile(filePath);
+    } else {
+      console.log('Not running in Electron, JSON not read from file:', filePath);
+      return { success: false, error: 'Not running in Electron' };
+    }
+  }
+  
+  async listFiles(): Promise<{ 
+    success: boolean; 
+    files?: Array<{
+      name: string;
+      isDirectory: boolean;
+      size: number;
+      modifiedTime: Date;
+    }>; 
+    error?: string 
+  }> {
+    if (this.isElectron) {
+      return window.electronAPI.listFiles();
+    } else {
+      console.log('Not running in Electron, cannot list files');
+      return { success: false, error: 'Not running in Electron' };
+    }
+  }
+}

@@ -1,0 +1,25 @@
+
+<div class="file-list-container flex-item">
+    <div>
+        <button mat-button [routerLink]="['./equipment']">
+            Create Equipment
+        </button>
+    </div>
+    @for(file of files; track file.name) {
+        <div>
+            <button mat-button (click)="loadFile(file)">
+                Load File
+            </button>
+            {{file.name}}
+        </div>
+    }
+</div>
+
+<mat-divider></mat-divider>
+<div class="image-container">
+    <img src="assets/f_logo1.png" height="60" alt="ENERGY TRANSITIONS INITIATIVE Logo"/>
+    <img src="assets/f_logo2.png" height="60" alt="BERKELEY LAB Logo"/>
+    <img src="assets/f_logo3.png" height="60" alt="ARGONNE NATIONAL LABORATORY Logo"/>
+    <img src="assets/f_logo4.jpg" height="60" alt="NORTHERN ARIZONA UNIVERSITY Logo"/>
+    <img src="assets/f_logo5.png" height="60" alt="CARNEGIE MELLON UNIVERSITY Logo"/>
+</div>

@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.filled-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+}
+
+// flex classes
+.flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.flex-column {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.flex-item {
+    flex: 1 !important;
+}
+
+.flex-center-row-items {
+    justify-content: center;
+}
+
+.flex-center-gap {
+    gap: 7px;
+}
+
+.flex-align-row-items {
+    align-items: center;
+}
