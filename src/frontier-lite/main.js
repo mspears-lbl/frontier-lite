@@ -7,8 +7,8 @@ let mainWindow
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1000,
-        height: 900,
+        width: 1900,
+        height: 1200,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -135,7 +135,7 @@ function createWindow() {
     });
 
     // Open the DevTools during development
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
     // Enable more detailed logging
     process.env.ELECTRON_ENABLE_LOGGING = true;
 

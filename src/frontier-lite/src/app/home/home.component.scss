@@ -5,3 +5,122 @@
     height: calc(100vh);
     overflow: auto;
 }
+// :host {
+//     flex: 1;
+//     display: flex;
+//     flex-direction: row;
+//     overflow: auto;
+//     min-height: 0;
+//     margin: 5px;
+// }
+
+h1 {
+    text-align: center;
+}
+
+.content-container {
+    flex: 1;
+    height: calc(100vh - 75px);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.option-row {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    .option-item {
+        flex: 1;
+        background-repeat: no-repeat;
+        max-width: 867px;
+    }
+
+    // .new-analysis {
+    //     background-image: url('../../../../../assets/createNewAnalysis.jpg');
+    // }
+    // .portfolio {
+    //     background-image: url('../../../../../assets/viewmyresilienceportfolio.JPG');
+    // }
+}
+
+
+.image-container {
+    flex: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    max-height: 65px;
+}
+
+.card-container {
+    flex: 1;
+}
+
+.card-row {
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-evenly;
+    justify-content: center;
+    // align-items: flex-start;
+
+}
+
+.app-card {
+    flex: 1;
+    border: 1px black solid;
+    border-radius: 5px;
+    // max-height: 250px;
+    max-width: 600px;
+    margin: 5px;
+    // display: flex;
+    // flex-direction: column;
+    mat-card-header {
+        background-color: #043054;
+        // background-color: #06b8f2;
+        margin: 0;
+        padding: 5px;
+        color: white;
+
+        mat-card-title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .icon-container {
+                margin-top: 5px;
+                margin-right: 7px;
+            }
+            .space-filler {
+                flex: 1;
+            }
+        }
+    }
+    mat-card-content {
+        flex: 1;
+        padding-top: 10px;
+        font-size: 18px;
+        display: flex;
+        flex-direction: column;
+        .new-analysis {
+            flex: 1;
+            background-repeat: no-repeat;
+            background-position: center;
+            min-height: 350px;
+            background-image: url('../../assets/createNewAnalysis.jpg');
+        }
+        .portfolio {
+            flex: 1;
+            background-repeat: no-repeat;
+            background-position: center;
+            min-height: 350px;
+            background-image: url('../../assets/viewmyresilienceportfolio.JPG');
+        }
+    }
+
+    mat-card-actions {
+        // padding-top: 10px;
+        justify-content: center;
+    }
+}

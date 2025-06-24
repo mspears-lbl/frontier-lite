@@ -1,22 +1,124 @@
 
-<div class="file-list-container flex-item">
-    <div>
-        <button mat-button [routerLink]="['./equipment']">
-            Create Equipment
-        </button>
+<h1 class="text-center">
+    What would you like to do?
+</h1>
+
+<div class="card-container">
+    <div class="card-row">
+
+        <mat-card class="app-card">
+            <mat-card-header>
+                <mat-card-title>
+                    <span class="space-filler"></span>
+                    <span class="icon-container">
+                        <mat-icon class="material-symbols-outlined">
+                            construction
+                        </mat-icon>
+                    </span>
+                    <span>
+                        Manage Equipment
+                    </span>
+                    <div class="space-filler"></div>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="new-analysis"></div>
+                <div class="text-container">
+                    <ul>
+                        <li>
+                            Define and configure electric grid components and assets
+                        </li>
+                    </ul>
+                </div>
+            </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-actions>
+                <button mat-flat-button color="accent" [routerLink]="['/equipment']">
+                    <mat-icon class="material-symbols-outlined">play_circle</mat-icon>
+                    Go
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="app-card">
+            <mat-card-header>
+                <mat-card-title>
+                    <span class="space-filler"></span>
+                    <span class="icon-container">
+                        <mat-icon class="material-symbols-outlined">insights</mat-icon>
+                    </span>
+                    <span>
+                        Create a New Analysis
+                    </span>
+                    <div class="space-filler"></div>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="new-analysis"></div>
+                <div class="text-container">
+                    <ul>
+                        <li>
+                            Map critical energy and community infrastructure
+                        </li>
+                        <li>
+                            View impacts to infrastructure from natural hazards
+                        </li>
+                        <li>
+                            View and edit tables of energy resilience strategy costs and benefits
+                        </li>
+                    </ul>
+                </div>
+            </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-actions>
+                <button mat-flat-button color="accent" [routerLink]="['/analysis']">
+                    <mat-icon class="material-symbols-outlined">play_circle</mat-icon>
+                    Go
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="app-card">
+            <mat-card-header>
+                <mat-card-title>
+                    <span class="space-filler"></span>
+                    <span class="icon-container">
+                        <mat-icon class="material-symbols-outlined">work</mat-icon>
+                    </span>
+                    <span>
+                        View My Resilience Portfolio
+                    </span>
+                    <span class="space-filler"></span>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="portfolio"></div>
+                <div class="text-container">
+                    <ul>
+                        <li>
+                            View a portfolio of energy resilience strategies through a dynamic dashboard
+                        </li>
+                        <li>
+                            Analyze resilience portfolio statistics and prioritize strategies using
+                            decision-enhancing inputs, filters, and sorting capabilities
+                        </li>
+                    </ul>
+                </div>
+            </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-actions>
+                <button mat-flat-button color="accent" [routerLink]="['/resilience-portfolio']">
+                    <mat-icon class="material-symbols-outlined">play_circle</mat-icon>
+                    Go
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
     </div>
-    @for(file of files; track file.name) {
-        <div>
-            <button mat-button (click)="loadFile(file)">
-                Load File
-            </button>
-            {{file.name}}
-        </div>
-    }
 </div>
 
 <mat-divider></mat-divider>
-<div class="image-container">
+<div class="flex-row flex-center-row-items flex-center-gap">
     <img src="assets/f_logo1.png" height="60" alt="ENERGY TRANSITIONS INITIATIVE Logo"/>
     <img src="assets/f_logo2.png" height="60" alt="BERKELEY LAB Logo"/>
     <img src="assets/f_logo3.png" height="60" alt="ARGONNE NATIONAL LABORATORY Logo"/>

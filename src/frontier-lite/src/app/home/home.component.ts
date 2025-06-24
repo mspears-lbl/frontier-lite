@@ -25,32 +25,32 @@ import { ActiveCollectionStore } from '../stores/active-collection.store';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-    readonly store = inject(ActiveCollectionStore);
+    // readonly store = inject(ActiveCollectionStore);
 
-    private fileList: DataFileList | null | undefined;
-    get files(): DataFile[] {
-        return this.fileList?.files || [];
-    }
+    // private fileList: DataFileList | null | undefined;
+    // get files(): DataFile[] {
+    //     return this.fileList?.files || [];
+    // }
 
 
     constructor(
-        private fileService: FileSystemService
+        // private fileService: FileSystemService
     ) {
     }
 
-    ngOnInit() {
-        this.loadData();
-    }
+    // ngOnInit() {
+    //     this.loadData();
+    // }
 
-    private async loadData(): Promise<void> {
-        console.log('list the files...');
-        this.fileList = await this.fileService.listFiles();
-        console.log('files', this.fileList);
-    }
+    // private async loadData(): Promise<void> {
+    //     console.log('list the files...');
+    //     this.fileList = await this.fileService.listFiles();
+    //     console.log('files', this.fileList);
+    // }
 
-    public async loadFile(file: DataFile): Promise<void> {
-        console.log('load file', file);
-        const data = await this.fileService.readJsonFromFile(file.name);
-        console.log('data', data);
-    }
+    // public async loadFile(file: DataFile): Promise<void> {
+    //     console.log('load file', file);
+    //     const data = await this.fileService.readJsonFromFile(file.name);
+    //     console.log('data', data);
+    // }
 }
