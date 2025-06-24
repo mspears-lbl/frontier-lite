@@ -1,0 +1,62 @@
+<h1 class="text-center">
+    Create Equipment
+</h1>
+
+<h2 class="text-center">
+    Select the Equipment Type:
+</h2>
+@if(form) {
+    <form [formGroup]="form">
+        <div class="flex-row flex-center-row-items">
+            <mat-button-toggle-group formControlName="equipmentType">
+                @for(item of equipmentTypeList; track item.id) {
+                    <mat-button-toggle [value]="item.id">
+                        {{item.name}}
+                    </mat-button-toggle>
+                }
+            </mat-button-toggle-group>
+        </div>
+    </form>
+}
+
+<h2 class="text-center">
+    Provide the Equipment Information
+</h2>
+
+@if(formProps) {
+<form [formGroup]="formProps" class="flex-row">
+    <mat-form-field class="flex-item" subscriptSizing="dynamic">
+        <mat-label>Name</mat-label>
+        <input matInput
+            type="text"
+            formControlName="name"
+            >
+    </mat-form-field>
+</form>
+}
+
+<h2 class="text-center">
+    Identify the Equipment Location
+</h2>
+
+<div>
+    <button mat-button (click)="clearLocation()">
+        Clear
+    </button>
+</div>
+<div class="flex-item flex-column">
+    <app-create-equipment-map
+    [clear$]="clear$"
+    [equipmentType]="equipmentType"
+    (equipmentLocation)="equipmentLocationHandler($event)">
+    </app-create-equipment-map>
+</div>
+
+<div class="flex-row flex-center-row-items">
+    <button mat-button [disabled]="!canSave" (click)="save()">
+        Save
+    </button>
+    <button mat-button [routerLink]="['..']">
+        Cancel
+    </button>
+</div>

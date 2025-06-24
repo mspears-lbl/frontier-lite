@@ -55,7 +55,7 @@ export interface GeometryCollection extends GeoJSON {
 }
 
 // Union type for all geometry types
-export type Geometry = 
+export type Geometry =
   | Point
   | MultiPoint
   | LineString

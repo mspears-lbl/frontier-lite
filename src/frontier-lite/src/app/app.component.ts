@@ -1,24 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { ElectronService } from './electron.service';
+import { ActiveCollectionStore } from './stores/active-collection.store';
+import { DataFile, DataFileList, FileSystemService } from './services/file-system.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterOutlet
+    ],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Angular Electron App';
-  isElectron: boolean;
 
-  constructor(private electronService: ElectronService) {
-    this.isElectron = this.electronService.isElectron;
-  }
+    readonly store = inject(ActiveCollectionStore);
 
-  sendMessageToElectron() {
-    this.electronService.sendMessage('Hello from Angular!');
-  }
+    private fileList: DataFileList | null | undefined;
+    get files(): DataFile[] {
+        return this.fileList?.files || [];
+    }
+
+
+    constructor(
+        private fileService: FileSystemService
+    ) {
+    }
+
+    ngOnInit() {
+        this.loadEquipmentFromFile();
+    }
+
+    private async loadEquipmentFromFile() {
+        const results = await this.fileService.readEquipmentFromFile();
+        console.log('existing data', results);
+        if (results.data) {
+            this.store.setData(results.data);
+        }
+    }
+
 }

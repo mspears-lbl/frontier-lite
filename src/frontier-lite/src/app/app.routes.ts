@@ -8,7 +8,13 @@ export const routes: Routes = [
   },
   {
     path: 'equipment',
+    pathMatch: 'full',
     loadComponent: () =>
-      import('./components/equipment-def-home/equipment-def-home.component').then((m) => m.EquipmentDefHomeComponent),
+      import('./equipment/components/equipment-home/equipment-home.component').then((m) => m.EquipmentHomeComponent),
+  },
+  {
+    path: 'equipment/create',
+    loadComponent: () =>
+      import('./equipment/components/create-equipment-home/create-equipment-home.component').then((m) => m.CreateEquipmentHomeComponent),
   },
 ];

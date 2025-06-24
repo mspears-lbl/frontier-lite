@@ -23,6 +23,8 @@ declare global {
     }
 }
 
+const equipmentFileName = 'equipment';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -55,6 +57,33 @@ export class FileSystemService {
             return { success: false, error: 'Electron API not available' };
         }
     }
+
+    /**
+     * Read JSON data from a file
+     * @param filePath Full path to the file to read
+     * @returns Promise with the data or error
+     */
+    async readEquipmentFromFile(): Promise<{ success: boolean; data?: FeatureCollection; error?: string }> {
+        if (window.electronAPI) {
+            return window.electronAPI.readJsonFromFile(equipmentFileName);
+        } else {
+            return { success: false, error: 'Electron API not available' };
+        }
+    }
+
+    /**
+     * Read JSON data from a file
+     * @param filePath Full path to the file to read
+     * @returns Promise with the data or error
+     */
+    async saveEquipmentFile(data: FeatureCollection): Promise<{ success: boolean; error?: string }> {
+        if (window.electronAPI) {
+            return window.electronAPI.writeJsonToFile(equipmentFileName, data);
+        } else {
+            return { success: false, error: 'Electron API not available' };
+        }
+    }
+
 
     async saveData(data: any): Promise<{ success: boolean; error?: string }> {
         if (window.electronAPI) {

@@ -1,0 +1,31 @@
+<mat-card class="app-card flex-item flex-column">
+    <mat-card-header>
+        <mat-card-title>
+            <span class="flex-item"></span>
+            <mat-icon class="material-symbols-outlined filled-icon">question_mark</mat-icon>
+            <span class="title-text">
+                Confirm
+            </span>
+            <span class="flex-item"></span>
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="flex-item flex-column">
+        <div class="content-container">
+            {{message}}
+        </div>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions class="flex-row flex-center-row-items">
+        <button mat-flat-button color="accent" (click)="ok()">
+            <mat-icon class="material-symbols-outlined filled-icon">check</mat-icon>
+            Yes
+        </button>
+        <button mat-stroked-button color="accent" (click)="cancel()">
+            <mat-icon class="material-symbols-outlined filled-icon">close</mat-icon>
+            No
+        </button>
+    </mat-card-actions>
+</mat-card>

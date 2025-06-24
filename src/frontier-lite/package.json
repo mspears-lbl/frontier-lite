@@ -29,6 +29,8 @@
     "electron-squirrel-startup": "^1.0.1",
     "maplibre-gl": "^5.6.0",
     "rxjs": "~7.8.0",
+    "terra-draw": "^1.8.0",
+    "terra-draw-maplibre-gl-adapter": "^1.1.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

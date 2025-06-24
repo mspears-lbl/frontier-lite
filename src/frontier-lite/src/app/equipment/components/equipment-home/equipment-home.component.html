@@ -1,0 +1,27 @@
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back
+    </button>
+    Equipment
+</h1>
+
+<div class="action-container">
+    <button mat-button [routerLink]="['./create']">
+        Create Equipment
+    </button>
+    <button mat-button (click)="zoomToAll()">
+        View All Equipment
+    </button>
+</div>
+
+<div class="flex-item flex-column">
+    <app-equipment-table (viewEquipment)="viewEquipmentHandler($event)">
+    </app-equipment-table>
+
+    <app-equipment-map [viewEquipment]="viewEquipment">
+    </app-equipment-map>
+</div>

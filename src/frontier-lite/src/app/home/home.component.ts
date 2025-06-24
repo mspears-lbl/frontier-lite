@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +25,7 @@ import { ActiveCollectionStore } from '../stores/active-collection.store';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+    readonly store = inject(ActiveCollectionStore);
 
     private fileList: DataFileList | null | undefined;
     get files(): DataFile[] {
