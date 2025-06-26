@@ -1,0 +1,35 @@
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back
+    </button>
+    Analysis
+</h1>
+
+<div>
+    <button mat-raised-button color="primary" (click)="getData()" [disabled]="loading">
+        <span *ngIf="loading">Loading...</span>
+        <span *ngIf="!loading">Get Threat Data</span>
+    </button>
+
+    <div *ngIf="error" style="color: red; margin-top: 10px;">
+        {{ error }}
+    </div>
+
+    <div *ngIf="data" style="margin-top: 10px;">
+        <h3>Data Retrieved:</h3>
+        <pre>{{ data | json }}</pre>
+    </div>
+</div>
+
+
+<app-threat-map class="flex-item flex-column"
+(threatInfoEvent)="handleThreatInfoEvent($event)">
+</app-threat-map>
+
+<app-threat-table class="flex-item flex-column" [threatInfo$]="threatInfo$">
+</app-threat-table>
+

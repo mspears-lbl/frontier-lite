@@ -21,6 +21,6 @@ export const routes: Routes = [
     path: 'analysis',
     pathMatch: 'full',
     loadComponent: () =>
-      import('./analysis/analysis-home/analysis-home.component').then((m) => m.AnalysisHomeComponent),
+      import('./analysis/components/analysis-home/analysis-home.component').then((m) => m.AnalysisHomeComponent),
   },
 ];

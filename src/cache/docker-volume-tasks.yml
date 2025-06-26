@@ -1,0 +1,37 @@
+version: '3'
+
+tasks:
+
+  create:
+    dotenv: ['../.env']
+    desc: Creates the docker volume for the cache
+    summary: >
+      Creates a new Docker volume that's mapped to the cache data directory
+      in order to persist the data.
+    cmds:
+      - docker volume create ${CACHE_VOLUME_NAME}
+    status:
+      - sh ../scripts/taskfile/volume-exists.sh $CACHE_VOLUME_NAME
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_VOLUME_NAME
+        msg: "Variable CACHE_VOLUME_NAME is not set"
+      # # # make sure the volume doesn't exist
+      # - sh: sh ../scripts/taskfile/volume-doesnt-exist.sh $CACHE_VOLUME_NAME
+      #   msg: "Volume CACHE_VOLUME_NAME already exists"
+
+  remove:
+    dotenv: ['../.env']
+    prompt: This will destroy your current cache volume... Do you want to continue?
+    desc: Remove the cache docker volume
+    cmds:
+      - docker volume rm ${CACHE_VOLUME_NAME}
+    status:
+      - sh ../scripts/taskfile/volume-doesnt-exist.sh $CACHE_VOLUME_NAME
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_VOLUME_NAME
+        msg: "Variable CACHE_VOLUME_NAME is not set"
+      # a docker volume must exist in order to remove
+      # - sh: sh ../scripts/taskfile/volume-exists.sh $CACHE_VOLUME_NAME
+      #   msg: "Volume $CACHE_VOLUME_NAME doesn't exist"

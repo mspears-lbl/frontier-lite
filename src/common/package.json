@@ -1,0 +1,28 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jasmine": "^5.1.4",
+    "@types/node": "^22.9.1",
+    "jasmine": "^5.1.0",
+    "jasmine-console-reporter": "^3.1.0",
+    "typescript": "~5.5.2"
+  },
+  "nodemonConfig": {
+    "ignore": [],
+    "watch": [
+      "src/"
+    ],
+    "ext": "ts,sql"
+  },
+  "dependencies": {
+    "jstat": "^1.9.6"
+  }
+}

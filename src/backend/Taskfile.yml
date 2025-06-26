@@ -1,0 +1,46 @@
+version: '3'
+
+tasks:
+  run:
+    dotenv: ['../.env']
+    desc: Start the Node.js backend on the local host.
+    cmds:
+      - npm start
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $NODE_VERSION
+        msg: "Variable NODE_VERSION is not set"
+      # make sure the node version matches the .env
+      - sh: sh ../scripts/taskfile/node-version.sh $NODE_VERSION
+        msg: "Your version of Node.js does not match NODE_VERSION"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $PG_HOST
+        msg: "Variable PG_HOST is not set"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $PG_PORT
+        msg: "Variable PG_PORT is not set"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $PG_DB_NAME
+        msg: "Variable PG_DB_NAME is not set"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $PG_DB_ADMIN_USER
+        msg: "Variable PG_DB_ADMIN_USER is not set"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $PG_DB_ADMIN_PASS
+        msg: "Variable PG_DB_ADMIN_PASS is not set"
+      # make sure the database port is open
+      - sh: sh ../scripts/taskfile/port-is-open.sh $PG_HOST $PG_PORT
+        msg: "$PG_HOST:$PG_PORT is not open"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_HOST
+        msg: "Variable CACHE_HOST is not set"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_PORT
+        msg: "Variable CACHE_PORT is not set"
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_PASSWORD
+        msg: "Variable CACHE_PASSWORD is not set"
+      # make sure the cache port is open
+      - sh: sh ../scripts/taskfile/port-is-open.sh $CACHE_HOST $CACHE_PORT
+        msg: "$CACHE_HOST:$CACHE_PORT is not open"
+

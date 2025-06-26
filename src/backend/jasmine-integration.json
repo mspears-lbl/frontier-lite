@@ -1,0 +1,7 @@
+{
+  "spec_files": [
+    "integration-tests/**/*.spec.ts"
+  ],
+  "stopSpecOnExpectationFailure": false,
+  "random": false
+}

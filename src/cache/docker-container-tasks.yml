@@ -1,0 +1,93 @@
+version: '3'
+
+tasks:
+
+  run:
+    dotenv: ['../.env']
+    desc: Launch a new cache container
+    cmds:
+      - |
+        docker run --name ${CACHE_CONTAINER_NAME} \
+          -p ${CACHE_RESTRICT_LOCAL}${CACHE_PORT}:6379 \
+          -v ${CACHE_VOLUME_NAME}:/data \
+          -d ${CACHE_IMG} \
+          keydb-server --save 60 1 --loglevel warning --requirepass ${CACHE_PASSWORD}
+    status:
+      - sh ../scripts/taskfile/container-exists.sh $CACHE_CONTAINER_NAME
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_CONTAINER_NAME
+        msg: "Variable CACHE_CONTAINER_NAME is not set"
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_VOLUME_NAME
+        msg: "Variable CACHE_VOLUME_NAME is not set"
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_PORT
+        msg: "Variable CACHE_PORT is not set"
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_IMG
+        msg: "Variable CACHE_IMG is not set"
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_RESTRICT_LOCAL
+        msg: "Variable CACHE_RESTRICT_LOCAL is not set"
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_PASSWORD
+        msg: "Variable CACHE_PASSWORD is not set"
+      # # make sure the volume exists
+      - sh: sh ../scripts/taskfile/volume-exists.sh $CACHE_VOLUME_NAME
+        msg: "Volume CACHE_VOLUME_NAME doesn't exist"
+
+  start:
+    dotenv: ['../.env']
+    desc: Start a stopped cache container
+    cmds:
+      - docker start ${CACHE_CONTAINER_NAME}
+    status:
+      - sh ../scripts/taskfile/container-is-running.sh $CACHE_CONTAINER_NAME
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_CONTAINER_NAME
+        msg: "Variable CACHE_CONTAINER_NAME is not set"
+      # # make sure the container is stopped
+      # - sh: sh ../scripts/taskfile/container-is-stopped.sh $CACHE_CONTAINER_NAME
+      #   msg: "Container CACHE_CONTAINER_NAME is not stopped"
+      # make sure the container exists
+      # - sh: sh ../scripts/taskfile/container-exists.sh $CACHE_CONTAINER_NAME
+      #   msg: "Container CACHE_CONTAINER_NAME doesn't exist"
+  
+  up:
+    dotenv: ['../.env']
+    cmds:
+      - task: run
+      - task: start
+      - sh ../scripts/taskfile/container-is-running.sh $CACHE_CONTAINER_NAME
+    preconditions:
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_CONTAINER_NAME
+        msg: "Variable CACHE_CONTAINER_NAME is not set"
+
+  stop:
+    dotenv: ['../.env']
+    desc: Stop the running cache container
+    cmds:
+      - docker stop ${CACHE_CONTAINER_NAME}
+    status:
+      - sh ../scripts/taskfile/container-isnt-running.sh $CACHE_CONTAINER_NAME
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_CONTAINER_NAME
+        msg: "Variable CACHE_CONTAINER_NAME is not set"
+      # make sure the container is running
+      # - sh: sh ../scripts/taskfile/container-is-running.sh $CACHE_CONTAINER_NAME
+      #   msg: "Container CACHE_CONTAINER_NAME is not running"
+
+  remove:
+    dotenv: ['../.env']
+    desc: Remove the stopped cache container
+    cmds:
+      - |
+        docker rm ${CACHE_CONTAINER_NAME}
+    status:
+      - sh ../scripts/taskfile/container-doesnt-exist.sh $CACHE_CONTAINER_NAME
+    preconditions:
+      # make sure the environment variable is set
+      - sh: sh ../scripts/taskfile/variable-is-set.sh $CACHE_CONTAINER_NAME
+        msg: "Variable CACHE_CONTAINER_NAME is not set"
+      # make sure the container is stopped
+      # - sh: sh ../scripts/taskfile/container-is-stopped.sh $CACHE_CONTAINER_NAME
+      #   msg: "Container CACHE_CONTAINER_NAME is not stopped"
+

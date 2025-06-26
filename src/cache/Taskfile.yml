@@ -1,0 +1,28 @@
+version: '3'
+
+includes:
+  volume: 
+    taskfile: ./docker-volume-tasks.yml
+  container: 
+    taskfile: ./docker-container-tasks.yml
+
+tasks:
+
+  up:
+    dotenv: ['../.env']
+    cmds:
+      - task: volume:create
+      - task: container:up
+
+  down:
+    dotenv: ['../.env']
+    cmds:
+      - task: container:stop
+
+  destroy:
+    dotenv: ['../.env']
+    prompt: This will destroy your current cache volume... Do you want to continue?
+    cmds:
+      - task: container:stop
+      - task: container:remove
+      - task: volume:remove
