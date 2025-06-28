@@ -27,3 +27,9 @@ router.get(
     // passport.authenticate('jwt', {session: false}),
     handlers.GetThreatInfoHandler.handleRequest
 );
+
+router.post(
+    '/threats-in-bounds',
+    // passport.authenticate('jwt', {session: false}),
+    handlers.getThreatsInBounds
+);

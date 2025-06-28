@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, ViewChild, effect, Input, EventEmitter, Output } from '@angular/core';
-import { Map, LngLatBounds, Popup } from 'maplibre-gl';
+import { Map as GlMap, LngLatBounds, Popup } from 'maplibre-gl';
 import { FeatureCollection, Point, LineString, Feature } from 'geojson';
 import { ActiveCollectionStore } from '../../../stores/active-collection.store';
 import { ThreatDataService } from '../../services/threat-data.service';
@@ -23,8 +23,9 @@ export class ThreatMapComponent {
     @ViewChild('mapContainer') mapContainer: ElementRef | null | undefined;
     readonly store = inject(ActiveCollectionStore);
     private threatDataService = inject(ThreatDataService);
-    private map: Map | null = null;
+    private map: GlMap | null = null;
     private consolidatedThreats = new Set<string>();
+    private boundsThreats = new Set<string>();
 
     constructor(
     ) {
@@ -63,7 +64,7 @@ export class ThreatMapComponent {
     }
 
     private buildMap(): void {
-        this.map = new Map({
+        this.map = new GlMap({
             container: this.mapContainer?.nativeElement,
             style: 'https://tiles.openfreemap.org/styles/liberty',
             center: [-95.964, 37.237] ,
@@ -97,48 +98,6 @@ export class ThreatMapComponent {
         this.map.addSource('threats-source', {
             type: 'vector',
             tiles: ['http://localhost:3000/api/threat-data/{z}/{x}/{y}.mvt']
-        });
-
-        // Intercept tile requests to get threat names
-        this.map.on('dataloading', (e) => {
-            //@ts-ignore
-            if (e.sourceId === 'threats-source' && e.tile) {
-                //@ts-ignore
-                const { z, x, y } = e.tile.tileID.canonical;
-                this.threatDataService.getThreatNames(z, x, y)
-                .subscribe({
-                    next: (threats) => {
-                        // this.threatInfoEvent.next(threats)
-                        // Add threats to consolidated set
-                        threats.forEach((threat: any) => {
-                            this.consolidatedThreats.add(JSON.stringify(threat));
-                        });
-                        console.log('All consolidated threats:', Array.from(this.consolidatedThreats).map(t => JSON.parse(t)));
-                        this.threatInfoEvent.emit(Array.from(this.consolidatedThreats).map(t => JSON.parse(t)));
-                    },
-                    error: (error) => {
-                        console.error('Error fetching threat names:', error);
-                    }
-                });
-            }
-        });
-
-        // Clear consolidated threats on map move
-        this.map.on('movestart', () => {
-            this.consolidatedThreats.clear();
-            this.threatInfoEvent.emit([]);
-        });
-
-        // Debug: Check what's in the vector tiles
-        this.map.on('data', (e) => {
-            //@ts-ignore
-            if (e.sourceId === 'threats-source' && e.isSourceLoaded) {
-                console.log('Threats source loaded');
-                console.log('map data:', e);
-                // Query features to see what's available
-                const features = this.map?.querySourceFeatures('threats');
-                console.log('Available features:', features);
-            }
         });
 
         // Add layer to display threats
@@ -188,6 +147,9 @@ export class ThreatMapComponent {
 
         // Add hover popup functionality
         this.addHoverPopup();
+
+        // Add bounds-based threat tracking
+        this.addBoundsTracking();
 
         // Zoom to the features
         this.zoomToFeatures(data as FeatureCollection);
@@ -292,6 +254,53 @@ export class ThreatMapComponent {
             padding: 50,
             maxZoom: 15
         });
+    }
+
+    private addBoundsTracking(): void {
+        if (!this.map) return;
+
+        // Track map view changes
+        this.map.on('moveend', () => {
+            this.updateThreatsFromBounds();
+        });
+
+        // Initial load
+        this.updateThreatsFromBounds();
+    }
+
+    private updateThreatsFromBounds(): void {
+        if (!this.map) return;
+
+        const bounds = this.map.getBounds();
+        const boundsData = {
+            north: bounds.getNorth(),
+            south: bounds.getSouth(),
+            east: this.normalizeLongitude(bounds.getEast()),
+            west: this.normalizeLongitude(bounds.getWest())
+        };
+
+        this.threatDataService.getThreatsInBounds(boundsData)
+            .subscribe({
+                next: (threats) => {
+                    console.log('Bounds-based threats:', threats);
+                    this.boundsThreats.clear();
+                    threats.forEach(threat => {
+                        this.boundsThreats.add(JSON.stringify(threat));
+                    });
+                    this.threatInfoEvent.emit(threats);
+
+                    // Emit both MVT and bounds-based threats for comparison
+                    // const allThreats = new Set([...this.consolidatedThreats, ...this.boundsThreats]);
+                    // console.log('Combined threats (MVT + Bounds):', Array.from(allThreats).map(t => JSON.parse(t)));
+                },
+                error: (error) => {
+                    console.error('Error fetching bounds-based threats:', error);
+                }
+            });
+    }
+
+    private normalizeLongitude(lng: number): number {
+        return ((lng + 180) % 360 + 360) % 360 - 180;
     }
 
     private getBounds(feature: Feature, bounds = new LngLatBounds()): LngLatBounds {

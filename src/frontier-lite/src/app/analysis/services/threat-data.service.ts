@@ -26,4 +26,9 @@ export class ThreatDataService {
         return this.http.get<ThreatInfo[]>(endpoint);
     }
 
+    public getThreatsInBounds(bounds: { north: number, south: number, east: number, west: number }): Observable<ThreatInfo[]> {
+        const endpoint = this.environmentService.getApiUrl('threats-in-bounds');
+        return this.http.post<ThreatInfo[]>(endpoint, bounds);
+    }
+
 }
