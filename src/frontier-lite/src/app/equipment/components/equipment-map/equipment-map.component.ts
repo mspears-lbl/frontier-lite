@@ -61,6 +61,7 @@ export class EquipmentMapComponent {
             style: 'https://tiles.openfreemap.org/styles/liberty',
             center: [-95.964, 37.237] ,
             zoom: 3.5,
+            attributionControl: false
         });
 
         this.map.on('load', () => {

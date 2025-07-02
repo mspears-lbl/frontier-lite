@@ -4,6 +4,7 @@ import { FeatureCollection, Point, LineString, Feature } from 'geojson';
 import { ActiveCollectionStore } from '../../../stores/active-collection.store';
 import { ThreatDataService } from '../../services/threat-data.service';
 import { ThreatInfo } from '../../../../../../common/models/threat-info';
+import { LocationResult } from '../../../../../../common/models/find-locations';
 
 @Component({
   selector: 'app-threat-map',
@@ -17,6 +18,12 @@ export class ThreatMapComponent {
     @Input()
     viewEquipment: EventEmitter<string | null> | null | undefined;
 
+    @Input()
+    viewThreat: EventEmitter<string> | null | undefined;
+
+    @Input()
+    viewLocation: EventEmitter<LocationResult> | null | undefined;
+
     @Output()
     threatInfoEvent = new EventEmitter<ThreatInfo[]>;
 
@@ -27,6 +34,9 @@ export class ThreatMapComponent {
     private consolidatedThreats = new Set<string>();
     private boundsThreats = new Set<string>();
 
+    private threatSourceID = 'threat-source' as const;
+    private threatLayerID = 'threat-layer' as const;
+
     constructor(
     ) {
         this.watchDataChanges();
@@ -34,6 +44,8 @@ export class ThreatMapComponent {
 
     ngOnInit() {
         this.subscribeToData();
+        this.subscribeToViewThreat();
+        this.subscribeToViewLocation();
     }
 
     ngAfterViewInit() {
@@ -63,6 +75,89 @@ export class ThreatMapComponent {
         })
     }
 
+    private subscribeToViewThreat(): void {
+        this.viewThreat?.subscribe(id => {
+            console.log(`view the threat ${id}`);
+            this.removeThreatFromMap();
+            this.addThreatSource(id);
+        })
+    }
+
+    private addThreatSource(id: string): void {
+        this.map?.addSource(this.threatSourceID,  {
+            type: 'vector',
+            tiles: [`http://localhost:3000/api/threat-data/{z}/{x}/{y}.mvt/${id}`]
+        })
+        // Add layer to display threats
+        this.map?.addLayer({
+            id: this.threatLayerID,
+            type: 'fill',
+            source: this.threatSourceID,
+            'source-layer': 'threat-polygons',
+            paint: {
+                'fill-color': '#ff0000',
+                'fill-opacity': 0.8,
+                'fill-outline-color': '#000000'
+            }
+        });
+
+        // Wait for tiles to load then zoom to threat
+        this.map?.on('sourcedata', (e) => {
+            if (e.sourceId === this.threatSourceID && e.isSourceLoaded) {
+                this.zoomToThreat();
+            }
+        });
+    }
+
+    private removeThreatFromMap(): void {
+        if (this.map?.getLayer(this.threatLayerID)) {
+            this.map?.removeLayer(this.threatLayerID);
+        }
+        if (this.map?.getSource(this.threatSourceID)) {
+            this.map?.removeSource(this.threatSourceID);
+        }
+    }
+
+    private zoomToThreat(): void {
+        if (!this.map || !this.map.getLayer(this.threatLayerID)) return;
+
+        const features = this.map.queryRenderedFeatures({ layers: [this.threatLayerID] });
+        if (!features.length) return;
+
+        const bounds = new LngLatBounds();
+        features.forEach(feature => {
+            bounds.extend(this.getBounds(feature));
+        });
+        this.map.fitBounds(bounds, { padding: 50 });
+    }
+
+    private subscribeToViewLocation(): void {
+        this.viewLocation?.subscribe((location: LocationResult) => {
+            console.log('view location');
+            console.log(location);
+            this.zoomToLocation(location);
+        })
+    }
+
+    private zoomToLocation(location: LocationResult): void {
+        if (!this.map) return;
+        this.removeThreatFromMap();
+
+        // Try to use mapView bounds first (4-element array: [west, south, east, north])
+        if (location.mapView && Array.isArray(location.mapView) && location.mapView.length === 4) {
+            const [west, south, east, north] = location.mapView;
+            const bounds = new LngLatBounds([west, south], [east, north]);
+            this.map.fitBounds(bounds, { padding: 50 });
+        }
+        // Fallback to lat/lng coordinates
+        else if (location.latitude && location.longitude) {
+            this.map.flyTo({
+                center: [location.longitude, location.latitude],
+                zoom: 12
+            });
+        }
+    }
+
     private buildMap(): void {
         this.map = new GlMap({
             container: this.mapContainer?.nativeElement,
@@ -82,7 +177,6 @@ export class ThreatMapComponent {
         if (this.map?.getSource('equipment-source')) {
             const source = this.map.getSource('equipment-source') as any;
             source.setData(data);
-            this.zoomToFeatures(data);
         }
         else if (this.map?.loaded()) {
             // Otherwise create it for the first time
@@ -95,23 +189,23 @@ export class ThreatMapComponent {
 
         if (!this.map || !data) return;
 
-        this.map.addSource('threats-source', {
-            type: 'vector',
-            tiles: ['http://localhost:3000/api/threat-data/{z}/{x}/{y}.mvt']
-        });
+        // this.map.addSource('threats-source', {
+        //     type: 'vector',
+        //     tiles: ['http://localhost:3000/api/threat-data/{z}/{x}/{y}.mvt']
+        // });
 
-        // Add layer to display threats
-        this.map.addLayer({
-            id: 'threats-layer',
-            type: 'fill',
-            source: 'threats-source',
-            'source-layer': 'threat-polygons',
-            paint: {
-                'fill-color': '#ff0000',
-                'fill-opacity': 0.8,
-                'fill-outline-color': '#000000'
-            }
-        });
+        // // Add layer to display threats
+        // this.map.addLayer({
+        //     id: 'threats-layer',
+        //     type: 'fill',
+        //     source: 'threats-source',
+        //     'source-layer': 'threat-polygons',
+        //     paint: {
+        //         'fill-color': '#ff0000',
+        //         'fill-opacity': 0.8,
+        //         'fill-outline-color': '#000000'
+        //     }
+        // });
 
         // Add the GeoJSON source
         this.map.addSource('equipment-source', {
@@ -308,9 +402,23 @@ export class ThreatMapComponent {
         if (feature.geometry.type === 'Point') {
             const coords = (feature.geometry as Point).coordinates;
             bounds.extend([coords[0], coords[1]]);
-        } else if (feature.geometry.type === 'LineString') {
+        }
+        else if (feature.geometry.type === 'LineString') {
             (feature.geometry as LineString).coordinates.forEach(coord => {
                 bounds.extend([coord[0], coord[1]]);
+            });
+        }
+        else if (
+            feature.geometry.type === 'Polygon' ||
+            feature.geometry.type === 'MultiPolygon'
+        ) {
+            const coords = feature.geometry.type === 'Polygon'
+                ? [feature.geometry.coordinates]
+                : feature.geometry.coordinates;
+            coords.forEach(polygon => {
+                polygon[0].forEach(coord => {
+                    bounds.extend([coord[0], coord[1]]);
+                });
             });
         }
         return bounds;

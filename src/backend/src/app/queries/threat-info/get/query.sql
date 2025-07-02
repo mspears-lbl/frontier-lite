@@ -8,7 +8,7 @@ WITH
 	threat_polygons as (
 		select
 			distinct
-			ts.id,
+			ts.uuid as id,
 			ts.name,
 			ts.disaster_type_id as "disasterType"
 		from
@@ -24,7 +24,7 @@ WITH
 	threat_lines as (
 		select
 			distinct
-			ts.id,
+			ts.uuid as id,
 			ts.name,
 			ts.disaster_type_id as "disasterType"
 		from

@@ -44,7 +44,8 @@ WITH
 			app.service_territory_region as str on str.id = ts.territory_region_id
 		where
 			ST_Intersects(gt.geom, bbox.geom)
-		-- and
+		and
+			ts.uuid = ${id}
 		-- 	gt.threat_scenario_id = ${threatScenarioId}
 	),
 
@@ -71,6 +72,8 @@ WITH
 			app.service_territory_region as str on str.id = ts.territory_region_id
 		where
 			ST_Intersects(gt.geom, bbox.geom)
+		and
+			ts.uuid = ${id}
 		-- and
 		-- 	gt.threat_scenario_id = ${threatScenarioId}
 	),

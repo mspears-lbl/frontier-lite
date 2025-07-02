@@ -1,3 +1,4 @@
+import { GetLocationsHandler } from "./get-locations";
 import { GetThreatDataHandler } from "./get-threat-data";
 import { GetThreatInfoHandler } from "./get-threat-info";
 import { getThreatsInBounds } from "./get-threats-in-bounds";
@@ -7,5 +8,6 @@ export {
     healthCheckHandler,
     GetThreatDataHandler,
     GetThreatInfoHandler,
-    getThreatsInBounds
+    getThreatsInBounds,
+    GetLocationsHandler
 }

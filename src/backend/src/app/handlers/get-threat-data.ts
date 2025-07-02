@@ -4,6 +4,7 @@ import * as util from 'util';
 import { isThreatDataRequest, ThreatDataRequest } from '../../../../common/models/threat-data';
 import { AppBadRequestError } from '../../../../common/models/errors';
 import { getThreatTilesQuery } from '../queries/threat-data/get';
+import { isValidUUID } from '../../../../common/utils/is-valid-uuid';
 
 const logger = createLogger(module);
 
@@ -55,10 +56,14 @@ export class GetThreatDataHandler {
             x: +this.request.params.x,
             y: +this.request.params.y,
             z: +this.request.params.z,
-            // threatScenarioId: +this.request.params.threatScenarioId,
-            // territoryRegionId: +this.request.params.territoryRegionId,
+            id: this.request.params.id
         }
-        if (!Number.isNaN(params.x) && !Number.isNaN(params.y) && !Number.isNaN(params.z)) {
+        if (
+            !Number.isNaN(params.x) &&
+            !Number.isNaN(params.y) &&
+            !Number.isNaN(params.z) &&
+            isValidUUID(params.id)
+        ) {
             return params;
         }
         else {

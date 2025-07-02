@@ -8,6 +8,7 @@ interface QueryParams {
     x: number;
     y: number;
     z: number;
+    id: string;
 }
 
 class GetThreatTilesQuery extends AppFileQuery {

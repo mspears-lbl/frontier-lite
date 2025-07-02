@@ -9,25 +9,18 @@
     Analysis
 </h1>
 
-<div>
-    @if(error) {
-        <div style="color: red; margin-top: 10px;">
-            {{ error }}
-        </div>
-    }
-    @else if (data) {
-        <div style="margin-top: 10px;">
-            <h3>Data Retrieved:</h3>
-            <pre>{{ data | json }}</pre>
-        </div>
-    }
-
-</div>
+<app-location-finder (locationSelected)="handleLocationSelect($event)"
+class="location-finder">
+</app-location-finder>
 
 <app-threat-map class="flex-item flex-column"
-(threatInfoEvent)="handleThreatInfoEvent($event)">
+(threatInfoEvent)="handleThreatInfoEvent($event)"
+[viewThreat]="viewThreat$"
+[viewLocation]="viewLocation$">
 </app-threat-map>
 
-<app-threat-table class="flex-item flex-column" [threatInfo$]="threatInfo$">
+<app-threat-table class="flex-item flex-column"
+[threatInfo$]="threatInfo$"
+(viewThreatEvent)="handleViewThreatEvent($event)">
 </app-threat-table>
 

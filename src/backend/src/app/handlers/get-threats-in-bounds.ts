@@ -15,7 +15,7 @@ export async function getThreatsInBounds(req: Request, res: Response) {
         if (west > east) {
             // Crosses antimeridian - split into two queries
             query = `
-                SELECT DISTINCT t.id, t.name, t.disaster_type_id
+                SELECT DISTINCT t.uuid as id, t.name, t.disaster_type_id
                 FROM app.threat_geom_polygon tgp
                 JOIN app.threat_scenario t ON t.id = tgp.threat_scenario_id
                 WHERE ST_Intersects(
@@ -36,7 +36,7 @@ export async function getThreatsInBounds(req: Request, res: Response) {
         } else {
             // Normal case
             query = `
-                SELECT DISTINCT t.id, t.name, t.disaster_type_id
+                SELECT DISTINCT t.uuid as id, t.name, t.disaster_type_id
                 FROM app.threat_geom_polygon tgp
                 JOIN app.threat_scenario t ON t.id = tgp.threat_scenario_id
                 WHERE ST_Intersects(

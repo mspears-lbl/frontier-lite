@@ -13,7 +13,7 @@ import { ThreatInfo } from '../../../../../../common/models/threat-info';
 import { getDisasterName } from '../../../../../../common/models/disaster-type';
 
 interface TableRow {
-    id: number;
+    id: string;
     name: string;
     disasterTypeName: string;
 }
@@ -44,8 +44,8 @@ export class ThreatTableComponent {
     @Input()
     threatInfo$: EventEmitter<ThreatInfo[]> | null | undefined;
 
-    // @Output()
-    // viewEquipment = new EventEmitter<string>();
+    @Output()
+    viewThreatEvent = new EventEmitter<string>();
 
     @ViewChild(MatPaginator)
     paginator!: MatPaginator;
@@ -110,7 +110,9 @@ export class ThreatTableComponent {
     //         });
     // }
 
-    // public view(id: string): void {
-    //     this.viewEquipment.emit(id);
-    // }
+    public view(id: string): void {
+        console.log('view the layer', id)
+        this.viewThreatEvent.emit(id);
+    }
+
 }

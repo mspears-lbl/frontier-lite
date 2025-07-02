@@ -17,7 +17,7 @@ router.get(
 // );
 
 router.get(
-    '/threat-data/:z/:x/:y.mvt',
+    '/threat-data/:z/:x/:y.mvt/:id',
     // passport.authenticate('jwt', {session: false}),
     handlers.GetThreatDataHandler.handleRequest
 );
@@ -32,4 +32,10 @@ router.post(
     '/threats-in-bounds',
     // passport.authenticate('jwt', {session: false}),
     handlers.getThreatsInBounds
+);
+
+router.post(
+    '/find-locations',
+    // passport.authenticate('jwt', {session: false}),
+    handlers.GetLocationsHandler.handleRequest
 );

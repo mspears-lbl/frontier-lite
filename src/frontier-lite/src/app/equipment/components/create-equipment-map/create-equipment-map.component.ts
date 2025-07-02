@@ -55,8 +55,9 @@ export class CreateEquipmentMapComponent {
         this.map = new Map({
             container: this.mapContainer?.nativeElement,
             style: 'https://tiles.openfreemap.org/styles/liberty',
-            center: [-95.964, 37.237] ,
+            center: [-95.964, 37.237],
             zoom: 3.5,
+            attributionControl: false
         });
 
         // configure TerraDraw once the styles have been loaded

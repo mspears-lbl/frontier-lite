@@ -1,7 +1,7 @@
 import { DisasterType } from "./disaster-type";
 
 export interface ThreatInfo {
-    id: number;
+    id: string;
     name: string;
     disasterType: DisasterType;
 }
