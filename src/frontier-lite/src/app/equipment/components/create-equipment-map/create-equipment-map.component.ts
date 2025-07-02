@@ -1,14 +1,17 @@
 import { Component, effect, ElementRef, EventEmitter, Input, Output, Signal, ViewChild } from '@angular/core';
-import { Map } from 'maplibre-gl';
+import { LngLatBounds, Map } from 'maplibre-gl';
 import { Feature } from '../../../models/geojson.interface';
 import { EquipmentType, getEquipmentTypeDrawMode } from '../../../models/equipment-type';
 import { TerraDraw, TerraDrawPointMode, TerraDrawLineStringMode } from "terra-draw";
 import { TerraDrawMapLibreGLAdapter } from "terra-draw-maplibre-gl-adapter";
+import { LocationFinderComponent } from '../../../location-finder/location-finder/location-finder.component';
+import { LocationResult } from '../../../../../../common/models/find-locations';
 
 
 @Component({
     selector: 'app-create-equipment-map',
     imports: [
+        LocationFinderComponent
     ],
     templateUrl: './create-equipment-map.component.html',
     styleUrl: './create-equipment-map.component.scss'
@@ -40,10 +43,7 @@ export class CreateEquipmentMapComponent {
 
     ngOnInit() {
         this.clear$?.subscribe(() => {
-            console.log('clear the map...');
-            this.equipmentLocation.emit(undefined);
-            this.draw?.clear();
-            this.setDrawMode();
+            this.clearDrawnObjects();
         })
     }
 
@@ -62,6 +62,37 @@ export class CreateEquipmentMapComponent {
 
         // configure TerraDraw once the styles have been loaded
         this.map.on('style.load', () => this.configureTerraDraw());
+    }
+
+    private clearDrawnObjects(): void {
+        console.log('clear the map...');
+        this.equipmentLocation.emit(undefined);
+        this.draw?.clear();
+        this.setDrawMode();
+    }
+
+    public handleLocationSelect(location: LocationResult): void {
+        console.log('zoom to location', location)
+        this.zoomToLocation(location);
+    }
+
+    private zoomToLocation(location: LocationResult): void {
+        if (!this.map) return;
+        this.clearDrawnObjects();
+
+        // Try to use mapView bounds first (4-element array: [west, south, east, north])
+        if (location.mapView && Array.isArray(location.mapView) && location.mapView.length === 4) {
+            const [west, south, east, north] = location.mapView;
+            const bounds = new LngLatBounds([west, south], [east, north]);
+            this.map.fitBounds(bounds, { padding: 50 });
+        }
+        // Fallback to lat/lng coordinates
+        else if (location.latitude && location.longitude) {
+            this.map.flyTo({
+                center: [location.longitude, location.latitude],
+                zoom: 12
+            });
+        }
     }
 
     private configureTerraDraw(): void {
