@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { getEquipmentTypeName } from '../../../models/equipment-type';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogService } from '../../../components/confirm-dialog/confirm-dialog.service';
+import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
 
 interface TableRow {
     id: string;
@@ -37,7 +38,7 @@ interface TableColumn {
 })
 export class EquipmentTableComponent {
     private ngUnSubscribe = new Subject<void>();
-    readonly store = inject(ActiveCollectionStore);
+    readonly store = inject(ActiveEquipmentCollectionStore);
 
     @Output()
     viewEquipment = new EventEmitter<string>();
@@ -86,17 +87,17 @@ export class EquipmentTableComponent {
 
 
     private setTableData(): void {
-        const data = this.store.data();
+        const collection = this.store.data();
         this.dataSource.data = [];
-        console.log('table data...');
-        console.log(data);
+        console.log('table collection data...');
+        console.log(collection);
         const rows: TableRow[] = [];
         try {
-            for (let feature of data?.features || []) {
+            for (let feature of collection?.data || []) {
                 const row: TableRow = {
                     id: String(feature.id),
-                    name: feature.properties.name,
-                    equipmentTypeName: getEquipmentTypeName(feature.properties.equipmentType)
+                    name: feature.name,
+                    equipmentTypeName: getEquipmentTypeName(feature.equipmentType)
                 };
                 rows.push(row);
             }

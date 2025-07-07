@@ -1,0 +1,24 @@
+<h2 class="text-center">
+    New Equipment Group
+</h2>
+
+@if(form) {
+<form [formGroup]="form" class="flex-row">
+    <mat-form-field class="flex-item" subscriptSizing="dynamic">
+        <mat-label>Name</mat-label>
+        <input matInput
+            type="text"
+            formControlName="name"
+            >
+    </mat-form-field>
+</form>
+}
+
+<mat-divider></mat-divider>
+
+<button mat-button (click)="create()">
+    Ok
+</button>
+<button mat-button (click)="cancel()">
+    cancel
+</button>

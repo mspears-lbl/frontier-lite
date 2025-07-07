@@ -1,0 +1,1 @@
+SELECT COUNT(*) as count FROM equipment_collection WHERE name = ?

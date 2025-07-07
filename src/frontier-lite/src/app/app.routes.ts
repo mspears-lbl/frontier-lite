@@ -18,6 +18,11 @@ export const routes: Routes = [
       import('./equipment/components/create-equipment-home/create-equipment-home.component').then((m) => m.CreateEquipmentHomeComponent),
   },
   {
+    path: 'equipment/groups',
+    loadComponent: () =>
+      import('./equipment/components/equipment-collection-list/equipment-collection-list.component').then((m) => m.EquipmentCollectionListComponent),
+  },
+  {
     path: 'analysis',
     pathMatch: 'full',
     loadComponent: () =>

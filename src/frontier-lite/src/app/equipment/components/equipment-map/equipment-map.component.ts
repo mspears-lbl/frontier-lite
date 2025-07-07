@@ -2,6 +2,8 @@ import { Component, ElementRef, inject, ViewChild, effect, Input, EventEmitter }
 import { Map, LngLatBounds, Popup } from 'maplibre-gl';
 import { FeatureCollection, Point, LineString, Feature } from 'geojson';
 import { ActiveCollectionStore } from '../../../stores/active-collection.store';
+import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
+import { buildFeatureCollection } from '../../../models/equipment';
 
 @Component({
   selector: 'app-equipment-map',
@@ -16,8 +18,9 @@ export class EquipmentMapComponent {
     viewEquipment: EventEmitter<string | null> | null | undefined;
 
     @ViewChild('mapContainer') mapContainer: ElementRef | null | undefined;
-    readonly store = inject(ActiveCollectionStore);
+    readonly store = inject(ActiveEquipmentCollectionStore);
     private map: Map | null = null;
+    private currentMapData: FeatureCollection | null | undefined;
 
     constructor(
     ) {
@@ -34,10 +37,13 @@ export class EquipmentMapComponent {
 
     private watchDataChanges(): void {
         effect(() => {
-            const data = this.store.data();
-            console.log('store data changed...', data);
-            if (this.map && this.map.loaded() && data) {
-                this.updateEquipmentLayer(data as FeatureCollection);
+            const collection = this.store.data();
+            console.log('store data changed...', collection);
+            this.currentMapData = collection?.data
+                ? buildFeatureCollection(collection) as FeatureCollection
+                : undefined;
+            if (this.map && this.map.loaded() && this.currentMapData) {
+                this.updateEquipmentLayer(this.currentMapData);
             }
         });
     }
@@ -49,8 +55,8 @@ export class EquipmentMapComponent {
             if (id) {
                 this.zoomToEquipment(id);
             }
-            else {
-                this.zoomToFeatures(this.store.data() as FeatureCollection);
+            else if (this.currentMapData) {
+                this.zoomToFeatures(this.currentMapData);
             }
         })
     }
@@ -83,7 +89,7 @@ export class EquipmentMapComponent {
     }
 
     private addEquipmentLayer(): void {
-        const data = this.store.data();
+        const data = this.currentMapData;
 
         if (!this.map || !data) return;
 
@@ -215,7 +221,7 @@ export class EquipmentMapComponent {
             return;
         }
         const data = this.store.data();
-        const feature = (data as FeatureCollection).features.find(f => f.id === id);
+        const feature = this.currentMapData?.features.find(f => f.id === id);
         if (!feature) {
             return;
         }

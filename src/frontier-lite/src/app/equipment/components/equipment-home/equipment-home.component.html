@@ -6,13 +6,38 @@
         </mat-icon>
         Back
     </button>
-    Equipment
+    <mat-icon class="material-symbols-outlined">
+        construction
+    </mat-icon>
+    Manage Equipment
 </h1>
 
-<div class="action-container">
+<!-- <app-equipment-collection-list></app-equipment-collection-list> -->
+
+<div class="action-container flex-row">
+    @if(form) {
+    <form [formGroup]="form">
+        <mat-form-field>
+            <mat-label>Equipment Collection</mat-label>
+            <mat-select formControlName="activeCollection">
+                @for (item of equipmentCollections; track item) {
+                <mat-option [value]="item.id">
+                    {{item.name}}
+                </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </form>
+    }
+
+    <button mat-button [routerLink]="['./groups']">
+        Manage Equipment Groups
+    </button>
+
     <button mat-button [routerLink]="['./create']">
         Create Equipment
     </button>
+
     <button mat-button (click)="zoomToAll()">
         View All Equipment
     </button>

@@ -1,0 +1,1 @@
+DELETE FROM equipment_collection WHERE uuid = ?

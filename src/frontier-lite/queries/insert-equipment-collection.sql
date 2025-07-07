@@ -1,0 +1,1 @@
+INSERT INTO equipment_collection (name, uuid) VALUES (?, ?)

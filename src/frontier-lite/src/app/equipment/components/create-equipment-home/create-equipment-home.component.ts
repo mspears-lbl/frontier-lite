@@ -15,6 +15,9 @@ import { Router, RouterModule } from '@angular/router';
 import { deepCopy } from '../../../models/deep-copy';
 import { ActiveCollectionStore } from '../../../stores/active-collection.store';
 import { MessageService } from '../../../services/message.service';
+import { EquipmentCollectionStore } from '../../stores/equipment-collection.store';
+import { AddEquipmentParams, isAddEquipmentParams } from '../../../models/equipment';
+import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
 
 @Component({
     selector: 'app-create-equipment-home',
@@ -35,7 +38,7 @@ import { MessageService } from '../../../services/message.service';
     styleUrl: './create-equipment-home.component.scss'
 })
 export class CreateEquipmentHomeComponent {
-    readonly store = inject(ActiveCollectionStore);
+    readonly store = inject(ActiveEquipmentCollectionStore);
     public form: FormGroup | undefined;
     public formProps: FormGroup | undefined;
     public equipmentTypeList = equipmentTypesList;
@@ -107,15 +110,28 @@ export class CreateEquipmentHomeComponent {
 
     public save(): void {
         console.log('save the equipment...');
-        if (this._location && this.formProps?.valid && this.form?.valid) {
-            const equipment = deepCopy(this._location);
-            equipment.properties.name = this.formProps.controls['name'].value;
-            equipment.properties.equipmentType = this.form.controls['equipmentType'].value;
-            console.log('add the equipment');
-            console.log(equipment);
-            this.store.addEquipment(equipment);
-            this.router.navigate(['/equipment']);
-            this.messageService.display('Equipment added successfully', {duration: 5000});
+        const activeCollection = this.store.data();
+        if (this._location && this.formProps?.valid && this.form?.valid && activeCollection) {
+            const params = {
+                collectionId: activeCollection.id,
+                equipmentType: this.form.controls['equipmentType'].value,
+                name: this.formProps.controls['name'].value,
+                geo: this._location
+            }
+            console.log('add the equipment:', params);
+            if (!isAddEquipmentParams(params)) {
+                this.messageService.display("Unable to add the equipment to the database!");
+                return;
+            }
+            this.store.addEquipment(params);
+            // const equipment = deepCopy(this._location);
+            // equipment.properties.name = this.formProps.controls['name'].value;
+            // equipment.properties.equipmentType = this.form.controls['equipmentType'].value;
+            // console.log('add the equipment');
+            // console.log(equipment);
+            // this.store.addEquipment(equipment);
+            // this.router.navigate(['/equipment']);
+            // this.messageService.display('Equipment added successfully', {duration: 5000});
         }
     }
 }

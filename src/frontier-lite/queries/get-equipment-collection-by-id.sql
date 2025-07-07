@@ -1,0 +1,1 @@
+SELECT uuid as id, name, created_at as created FROM equipment_collection WHERE id = ?
