@@ -1,10 +1,9 @@
 import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
 import { patchState } from '@ngrx/signals';
-import { computed, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
-import { AddEquipmentParams, EquipmentCollection } from '../../models/equipment';
-import { FeatureCollection, Feature } from '../../models/geojson.interface';
+import { EquipmentCollection } from '../../models/equipment';
 
 interface EquipmentCollectionState {
     data: EquipmentCollection[] | null | undefined;

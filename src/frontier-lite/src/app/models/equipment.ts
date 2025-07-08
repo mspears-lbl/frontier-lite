@@ -1,5 +1,5 @@
 import { EquipmentType, isEquipmentType } from "./equipment-type";
-import { Feature, FeatureCollection } from "./geojson.interface";
+import { FeatureCollection, Feature } from 'geojson';
 
 export interface Equipment {
     id: number;
@@ -28,6 +28,11 @@ export interface AddEquipmentParams {
     equipmentType: EquipmentType;
     name: string;
     geo: Feature;
+}
+
+export interface AddEquipmentResult {
+    success: boolean;
+    error?: any;
 }
 
 export function isAddEquipmentParams(value: any): value is AddEquipmentParams {

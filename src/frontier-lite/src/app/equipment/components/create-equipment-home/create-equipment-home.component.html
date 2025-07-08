@@ -1,9 +1,32 @@
-<h1 class="text-center">
+<!-- <h1 class="text-center">
+    Create Equipment
+</h1> -->
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back
+    </button>
+    <mat-icon class="material-symbols-outlined">
+        construction
+    </mat-icon>
     Create Equipment
 </h1>
 
-<h2 class="text-center">
-    Select the Equipment Type:
+<h2 class="flex-row flex-center-row-items flex-justify-row-content flex-center-gap">
+    @if(hasEquipmentType) {
+    <mat-icon class="material-symbols-outlined fg-success">
+        check_circle
+    </mat-icon>
+    }
+    @else {
+    <mat-icon class="material-symbols-outlined fg-error">
+        warning
+    </mat-icon>
+    }
+    Select the Equipment Type
 </h2>
 @if(form) {
     <form [formGroup]="form">
@@ -19,7 +42,17 @@
     </form>
 }
 
-<h2 class="text-center">
+<h2 class="flex-row flex-center-row-items flex-justify-row-content flex-center-gap">
+    @if(hasEquipmentInfo) {
+    <mat-icon class="material-symbols-outlined fg-success">
+        check_circle
+    </mat-icon>
+    }
+    @else {
+    <mat-icon class="material-symbols-outlined fg-error">
+        warning
+    </mat-icon>
+    }
     Provide the Equipment Information
 </h2>
 
@@ -35,13 +68,23 @@
 </form>
 }
 
-<h2 class="text-center">
+<h2 class="flex-row flex-center-row-items flex-justify-row-content flex-center-gap">
+    @if(hasLocation) {
+    <mat-icon class="material-symbols-outlined fg-success">
+        check_circle
+    </mat-icon>
+    }
+    @else {
+    <mat-icon class="material-symbols-outlined fg-error">
+        warning
+    </mat-icon>
+    }
     Identify the Equipment Location
 </h2>
 
 <div>
-    <button mat-button (click)="clearLocation()">
-        Clear
+    <button mat-button (click)="clearLocation()" [disabled]="!hasLocation">
+        Clear Map Location
     </button>
 </div>
 <div class="flex-item flex-column">

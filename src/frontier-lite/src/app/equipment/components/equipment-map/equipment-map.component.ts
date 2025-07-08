@@ -1,7 +1,6 @@
-import { Component, ElementRef, inject, ViewChild, effect, Input, EventEmitter } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, effect, Input, EventEmitter, Output } from '@angular/core';
 import { Map, LngLatBounds, Popup } from 'maplibre-gl';
 import { FeatureCollection, Point, LineString, Feature } from 'geojson';
-import { ActiveCollectionStore } from '../../../stores/active-collection.store';
 import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
 import { buildFeatureCollection } from '../../../models/equipment';
 
@@ -72,6 +71,13 @@ export class EquipmentMapComponent {
 
         this.map.on('load', () => {
             this.addEquipmentLayer();
+        });
+
+        this.map.on('moveend', () => {
+            if (this.map) {
+                const center = this.map.getCenter();
+                const zoom = this.map.getZoom();
+            }
         });
     }
 

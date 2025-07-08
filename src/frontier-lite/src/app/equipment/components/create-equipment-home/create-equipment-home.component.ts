@@ -1,8 +1,6 @@
-import { Component, EventEmitter, inject, signal, effect } from '@angular/core';
-import { EquipmentTableComponent } from '../equipment-table/equipment-table.component';
-import { EquipmentMapComponent } from '../equipment-map/equipment-map.component';
+import { Component, EventEmitter, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -10,14 +8,11 @@ import { EquipmentType, equipmentTypesList } from '../../../models/equipment-typ
 import { CreateEquipmentMapComponent } from '../create-equipment-map/create-equipment-map.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Feature } from '../../../models/geojson.interface';
 import { Router, RouterModule } from '@angular/router';
-import { deepCopy } from '../../../models/deep-copy';
-import { ActiveCollectionStore } from '../../../stores/active-collection.store';
 import { MessageService } from '../../../services/message.service';
-import { EquipmentCollectionStore } from '../../stores/equipment-collection.store';
-import { AddEquipmentParams, isAddEquipmentParams } from '../../../models/equipment';
+import { isAddEquipmentParams } from '../../../models/equipment';
 import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
+import { Feature } from 'geojson';
 
 @Component({
     selector: 'app-create-equipment-home',
@@ -44,6 +39,9 @@ export class CreateEquipmentHomeComponent {
     public equipmentTypeList = equipmentTypesList;
     public equipmentType = signal<EquipmentType>(EquipmentType.GenerationAsset);
     public clear$ = new EventEmitter<void>();
+    get hasEquipmentType(): boolean {
+        return this.equipmentType() ? true : false;
+    }
     private _location: Feature | null | undefined;
     get hasLocation(): boolean {
         return this._location ? true : false;
@@ -108,7 +106,7 @@ export class CreateEquipmentHomeComponent {
         this._location = feature;
     }
 
-    public save(): void {
+    public async save(): Promise<void> {
         console.log('save the equipment...');
         const activeCollection = this.store.data();
         if (this._location && this.formProps?.valid && this.form?.valid && activeCollection) {
@@ -123,15 +121,14 @@ export class CreateEquipmentHomeComponent {
                 this.messageService.display("Unable to add the equipment to the database!");
                 return;
             }
-            this.store.addEquipment(params);
-            // const equipment = deepCopy(this._location);
-            // equipment.properties.name = this.formProps.controls['name'].value;
-            // equipment.properties.equipmentType = this.form.controls['equipmentType'].value;
-            // console.log('add the equipment');
-            // console.log(equipment);
-            // this.store.addEquipment(equipment);
-            // this.router.navigate(['/equipment']);
-            // this.messageService.display('Equipment added successfully', {duration: 5000});
+            const result = await this.store.addEquipment(params);
+            if (result.success) {
+                this.messageService.display('Equipment added successfully', {duration: 5000});
+                this.router.navigate(['/equipment']);
+            }
+            else {
+                this.messageService.display(`Unable to add the equipment to the database!`);
+            }
         }
     }
 }

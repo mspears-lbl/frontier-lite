@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Observable, map } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { NewEquipmentCollectionComponent } from './new-equipment-collection.component';
 
 @Injectable({

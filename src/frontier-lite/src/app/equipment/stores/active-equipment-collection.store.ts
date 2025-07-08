@@ -4,7 +4,7 @@ import { computed, inject, effect } from '@angular/core';
 import { EquipmentCollectionStore } from './equipment-collection.store';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
-import { AddEquipmentParams, EquipmentCollection, EquipmentCollectionData } from '../../models/equipment';
+import { AddEquipmentParams, AddEquipmentResult, EquipmentCollection, EquipmentCollectionData } from '../../models/equipment';
 
 interface ActiveEquipmentCollectionState {
     data: EquipmentCollectionData | null | undefined;
@@ -72,8 +72,8 @@ export const ActiveEquipmentCollectionStore = signalStore(
             clearData: () => {
                 patchState(store, {data: undefined});
             },
-            addEquipment: async (params: AddEquipmentParams) => {
-                await dbService.insertEquipment(params);
+            addEquipment: async (params: AddEquipmentParams): Promise<AddEquipmentResult> => {
+                const result = await dbService.insertEquipment(params);
                 const current = store.data();
                 if (current) {
                     patchState(store, { data: await getCollectionData(current) });
@@ -81,10 +81,7 @@ export const ActiveEquipmentCollectionStore = signalStore(
                 else {
                     patchState(store, {data: undefined});
                 }
-                // Reload data to keep store in sync
-                // const results = await dbService.getEquipmentCollections();
-                // const data = results?.data ? deepCopy(results.data) : undefined;
-                // patchState(store, { data });
+                return result;
             },
             // loadData: async () => {
             //     const results = await dbService.getActiveEquipmentCollections();

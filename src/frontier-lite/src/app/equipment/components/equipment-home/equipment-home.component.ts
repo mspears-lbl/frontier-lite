@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { EquipmentCollectionListComponent } from '../equipment-collection-list/equipment-collection-list.component';
 import { DatabaseService } from '../../../services/database.service';
 import { EquipmentCollection } from '../../../models/equipment';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,7 +29,6 @@ import { MessageService } from '../../../services/message.service';
         ReactiveFormsModule,
         EquipmentTableComponent,
         EquipmentMapComponent,
-        // EquipmentCollectionListComponent
   ],
   templateUrl: './equipment-home.component.html',
   styleUrl: './equipment-home.component.scss'

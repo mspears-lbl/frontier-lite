@@ -1,11 +1,13 @@
-import { Component, effect, ElementRef, EventEmitter, Input, Output, Signal, ViewChild } from '@angular/core';
-import { LngLatBounds, Map } from 'maplibre-gl';
-import { Feature } from '../../../models/geojson.interface';
+import { Component, effect, ElementRef, EventEmitter, inject, Input, Output, Signal, ViewChild } from '@angular/core';
+import { LngLatBounds, Map, Popup } from 'maplibre-gl';
+import { Feature, FeatureCollection, LineString, Point } from 'geojson';
 import { EquipmentType, getEquipmentTypeDrawMode } from '../../../models/equipment-type';
 import { TerraDraw, TerraDrawPointMode, TerraDrawLineStringMode } from "terra-draw";
 import { TerraDrawMapLibreGLAdapter } from "terra-draw-maplibre-gl-adapter";
 import { LocationFinderComponent } from '../../../location-finder/location-finder/location-finder.component';
 import { LocationResult } from '../../../../../../common/models/find-locations';
+import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
+import { buildFeatureCollection } from '../../../models/equipment';
 
 
 @Component({
@@ -25,11 +27,12 @@ export class CreateEquipmentMapComponent {
     equipmentType: Signal<EquipmentType> | null | undefined;
 
     @Output()
-    equipmentLocation = new EventEmitter<Feature>();
+    equipmentLocation = new EventEmitter<any>();
 
     @ViewChild('mapContainer') mapContainer: ElementRef | null | undefined;
     private map: Map | null = null;
     private draw: TerraDraw | null | undefined;
+    readonly store = inject(ActiveEquipmentCollectionStore);
 
     constructor(
     ) {
@@ -61,7 +64,10 @@ export class CreateEquipmentMapComponent {
         });
 
         // configure TerraDraw once the styles have been loaded
-        this.map.on('style.load', () => this.configureTerraDraw());
+        this.map.on('style.load', () => {
+            this.configureTerraDraw()
+            this.addEquipmentLayer();
+        });
     }
 
     private clearDrawnObjects(): void {
@@ -132,4 +138,150 @@ export class CreateEquipmentMapComponent {
         console.log(features);
     }
 
+    private addEquipmentLayer(): void {
+        const equipmentData = this.store.data();
+        if (!equipmentData) {
+            return;
+        }
+        const data = buildFeatureCollection(equipmentData);
+
+        if (!this.map || !data) {
+            return;
+        }
+
+        // Add the GeoJSON source
+        this.map.addSource('equipment-source', {
+            type: 'geojson',
+            data: data
+        });
+
+        // Add a layer for points
+        this.map.addLayer({
+            id: 'equipment-points',
+            type: 'circle',
+            source: 'equipment-source',
+            filter: ['==', '$type', 'Point'],
+            paint: {
+                'circle-radius': 6,
+                'circle-color': '#FF6B6B',
+                'circle-stroke-width': 1,
+                'circle-stroke-color': '#FFFFFF'
+            }
+        });
+
+        // Add a layer for lines
+        this.map.addLayer({
+            id: 'equipment-lines',
+            type: 'line',
+            source: 'equipment-source',
+            filter: ['==', '$type', 'LineString'],
+            paint: {
+                'line-color': '#4264FB',
+                'line-width': 2
+            }
+        });
+
+        // Add hover popup functionality
+        this.addHoverPopup();
+
+        // Zoom to the features
+        this.zoomToFeatures(data as FeatureCollection);
+    }
+
+    private addHoverPopup(): void {
+        if (!this.map) return;
+
+        // Create a popup but don't add it to the map yet
+        const popup = new Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
+        // Show popup on mouse enter
+        this.map.on('mouseenter', 'equipment-points', (e) => {
+            if (!e.features?.length || !this.map) return;
+
+            // Change the cursor style
+            this.map.getCanvas().style.cursor = 'pointer';
+
+            const feature = e.features[0];
+            const coordinates = (feature.geometry as Point).coordinates.slice();
+            const name = feature.properties?.['name'] || 'Unnamed';
+
+            // Populate the popup and set its coordinates
+            popup.setLngLat(coordinates as [number, number])
+                .setHTML(`<strong>${name}</strong>`)
+                .addTo(this.map);
+        });
+
+        // Handle line features
+        this.map.on('mouseenter', 'equipment-lines', (e) => {
+            if (!e.features?.length || !this.map) return;
+
+            // Change the cursor style
+            this.map.getCanvas().style.cursor = 'pointer';
+
+            const feature = e.features[0];
+            const coordinates = e.lngLat;
+            const name = feature.properties?.['name'] || 'Unnamed';
+
+            // Populate the popup and set its coordinates
+            popup.setLngLat(coordinates)
+                .setHTML(`<strong>${name}</strong>`)
+                .addTo(this.map);
+        });
+
+        // Remove popup on mouse leave
+        this.map.on('mouseleave', 'equipment-points', () => {
+            if (!this.map) return;
+            this.map.getCanvas().style.cursor = '';
+            popup.remove();
+        });
+
+        this.map.on('mouseleave', 'equipment-lines', () => {
+            if (!this.map) return;
+            this.map.getCanvas().style.cursor = '';
+            popup.remove();
+        });
+    }
+
+    private getBounds(feature: Feature, bounds = new LngLatBounds()): LngLatBounds {
+        // const bounds = new LngLatBounds();
+        if (feature.geometry.type === 'Point') {
+            const coords = (feature.geometry as Point).coordinates;
+            bounds.extend([coords[0], coords[1]]);
+        } else if (feature.geometry.type === 'LineString') {
+            (feature.geometry as LineString).coordinates.forEach(coord => {
+                bounds.extend([coord[0], coord[1]]);
+            });
+        }
+        return bounds;
+    }
+
+    private zoomToFeatures(featureCollection: FeatureCollection): void {
+        if (!this.map || !featureCollection.features.length) return;
+
+        // Get source bounds from the map
+        const bounds = new LngLatBounds();
+
+        featureCollection.features.forEach(feature => {
+            bounds.extend(this.getBounds(feature));
+        });
+        // featureCollection.features.forEach(feature => {
+        //     if (feature.geometry.type === 'Point') {
+        //         const coords = (feature.geometry as Point).coordinates;
+        //         bounds.extend([coords[0], coords[1]]);
+        //     } else if (feature.geometry.type === 'LineString') {
+        //         (feature.geometry as LineString).coordinates.forEach(coord => {
+        //             bounds.extend([coord[0], coord[1]]);
+        //         });
+        //     }
+        // });
+
+        // Zoom to the bounds with some padding
+        this.map.fitBounds(bounds, {
+            padding: 50,
+            maxZoom: 15
+        });
+    }
 }
