@@ -1,5 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+// @use './app/stypesm3-theme' as theme;
+// @use './m3-theme.scss' as theme;
+@use './colors.scss' as colors;
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -48,3 +62,35 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         flex: 1 !important;
     }
 }
+
+// Color utility classes
+.bg-primary { background-color: colors.$primary !important; }
+.bg-primary-light { background-color: colors.$primary-light; }
+.bg-primary-dark { background-color: colors.$primary-dark; }
+
+.fg-primary { color: colors.$primary !important; }
+.fg-primary-light { color: colors.$primary-light !important; }
+.fg-error { color: colors.$error !important; }
+.fg-success { color: colors.$success !important; }
+
+.bg-secondary { background-color: colors.$secondary; }
+.bg-secondary-light { background-color: colors.$secondary-light; }
+.bg-secondary-dark { background-color: colors.$secondary-dark; }
+
+// .bg-tertiary { background-color: colors.$tertiary; }
+// .bg-tertiary-light { background-color: colors.$tertiary-light; }
+// .bg-tertiary-dark { background-color: colors.$tertiary-dark; }
+
+.text-primary { color: colors.$primary; }
+.text-secondary { color: colors.$secondary; }
+// .text-tertiary { color: colors.$tertiary; }
+
+.bg-error { background-color: colors.$error !important; }
+.bg-error-light { background-color: colors.$error-light; }
+.bg-error-dark { background-color: colors.$error-dark; }
+
+.warning-row {
+    margin-top: 7px;
+    font-size: 1.1rem;
+}
+

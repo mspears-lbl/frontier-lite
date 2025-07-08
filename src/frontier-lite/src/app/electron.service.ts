@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './models/equipment';
+import { AddAnalysisProjectParams, AddRecordResult, AnalysisProject } from './analysis/models/analysis-project';
 
 export interface ElectronAPI {
     sendMessage: (message: any) => void;
@@ -24,6 +25,9 @@ export interface ElectronAPI {
     insertEquipmentCollection: (name: string) => Promise<{ success: boolean; data?: EquipmentCollection; error?: string }>;
     getEquipmentCollections: () => Promise<{ success: boolean; data?: EquipmentCollection[]; error?: string }>;
     deleteEquipmentCollection: (id: string) => Promise<{ success: boolean; result?: any; error?: string }>;
+    getProjects: () => Promise<{ success: boolean; data?: AnalysisProject[]; error?: string }>;
+    addProject: (params: AddAnalysisProjectParams) => Promise<AddRecordResult>;
+    deleteProject: (id: string) => Promise<{ success: boolean; result?: any; error?: string }>;
 }
 
 declare global {

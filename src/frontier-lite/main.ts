@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams } from './src/app/models/equipment';
+import { AddAnalysisProjectParams, AddRecordResult } from './src/app/analysis/models/analysis-project';
 
 let mainWindow: BrowserWindow | null = null;
 let dbService: DatabaseService;
@@ -193,6 +194,37 @@ function createWindow(): void {
             return { success: false, error: (error as Error).message };
         }
     });
+
+    ipcMain.handle('db:get-projects', async (event: IpcMainInvokeEvent) => {
+        try {
+            const data = dbService.getProjects();
+            return { success: true, data: data };
+        } catch (error) {
+            console.error('Error getting analysis projects:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:add-project', (event: IpcMainInvokeEvent, params: AddAnalysisProjectParams): AddRecordResult => {
+        try {
+            dbService.addProject(params);
+            return { success: true };
+        } catch (error) {
+            console.error('Error add project:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:delete-project', async (event: IpcMainInvokeEvent, id: string) => {
+        try {
+            const result = dbService.deleteProject(id);
+            return { success: true, result };
+        } catch (error) {
+            console.error('Error deleting project:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
 
     mainWindow.webContents.openDevTools();
     process.env['ELECTRON_ENABLE_LOGGING'] = 'true';

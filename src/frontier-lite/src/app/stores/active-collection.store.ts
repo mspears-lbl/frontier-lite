@@ -1,8 +1,8 @@
 import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
 import { patchState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
-import { Feature, FeatureCollection } from '../models/geojson.interface';
 import { FileSystemService } from '../services/file-system.service';
+import { FeatureCollection, Feature } from 'geojson';
 
 interface ActiveCollectionState {
     // count: number;

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { EquipmentCollectionStore } from './equipment/stores/equipment-collection.store';
+import { AnalysisProjectStore } from './analysis/stores/projects-store';
 
 @Component({
     selector: 'app-root',
@@ -14,6 +15,7 @@ import { EquipmentCollectionStore } from './equipment/stores/equipment-collectio
 export class AppComponent {
 
     readonly store = inject(EquipmentCollectionStore);
+    readonly projectsStore = inject(AnalysisProjectStore)
 
     constructor(
     ) {
@@ -25,6 +27,7 @@ export class AppComponent {
 
     private async loadEquipment() {
         this.store.loadData();
+        this.projectsStore.loadData();
     }
 
 

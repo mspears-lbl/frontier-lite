@@ -101,12 +101,84 @@ CREATE TABLE IF NOT EXISTS equipment (
 create index if not exists
     idx_equipment_collection_id on equipment (collection_id);
 
---------------
--- projects --
---------------
-create table if not exists projects (
+-------------
+-- project --
+-------------
+create table if not exists project (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    uuid text not null unique,
     name TEXT NOT NULL,
     description TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+--------------------
+-- project_threat --
+--------------------
+create table if not exists project_threat (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    threat_id TEXT not null,
+    FOREIGN KEY (project_id) REFERENCES project (id),
+    unique (project_id, threat_id)
+);
+
+------------------------------
+-- project_threat_equipment --
+------------------------------
+create table if not exists project_threat_equipment (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_threat_id INTEGER NOT NULL,
+    equipment_id INTEGER NOT NULL,
+    FOREIGN KEY (project_threat_id) REFERENCES project_threat (id),
+    FOREIGN KEY (equipment_id) REFERENCES equipment (id),
+    unique (project_threat_id, equipment_id)
+);
+
+-------------------
+-- strategy_type --
+-------------------
+create table if not exists strategy_type (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL unique
+);
+
+insert into
+    strategy_type (id, name)
+with
+    w_values as (
+        select 1 as id, 'Relocate vulnerable lines' as name union
+        select 2, 'Convert wood poles to concrete' union
+        select 3, 'Bracing poles (Guy wires and Pole foam)' union
+        select 4, 'Prestaging transmission equipment' union
+        select 5, 'Reinforce substations' union
+        select 6, 'Build new substations relocated' union
+        select 7, 'Purchase mobile substations' union
+        select 8, 'Prestaging substation equipment' union
+        select 9, 'Relocate generation' union
+        select 10, 'Reinforce generation' union
+        select 11, 'Prestaging generation equipment'
+    )
+select
+    n.id, n.name
+from
+    w_values as n
+left join
+    strategy_type as e
+    on e.id = n.id
+where
+    e.id is null
+;
+
+-------------------------------
+-- threat_equipment_strategy --
+-------------------------------
+create table if not exists threat_equipment_strategy (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    threat_equipment_id INTEGER NOT NULL,
+    strategy_type_id INTEGER NOT NULL,
+    obj text not null,
+    FOREIGN KEY (threat_equipment_id) REFERENCES threat_equipment (id),
+    FOREIGN KEY (strategy_type_id) REFERENCES strategy_type (id),
+    unique (threat_equipment_id, strategy_type_id)
 );

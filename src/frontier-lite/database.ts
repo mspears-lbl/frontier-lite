@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
+import { AddAnalysisProjectParams, AddRecordResult, AnalysisProject } from './src/app/analysis/models/analysis-project';
 
 export class DatabaseService {
     private db: Database.Database;
@@ -80,6 +81,25 @@ export class DatabaseService {
     public deleteEquipmentCollection(id: string): Database.RunResult {
         const stmt = this.db.prepare(queries['delete-equipment-collection']);
         return stmt.run(id);
+    }
+
+    public getProjects(): AnalysisProject[] {
+        const stmt = this.db.prepare(queries['get-project']);
+        return stmt.all() as AnalysisProject[];
+    }
+
+    public addProject(params: AddAnalysisProjectParams): Database.RunResult {
+        const uuid = v4();
+        const stmt = this.db.prepare(queries['insert-project']);
+        return stmt.run({
+            ...params,
+            uuid
+        });
+    }
+
+    public deleteProject(id: string): Database.RunResult {
+        const stmt = this.db.prepare(queries['delete-project']);
+        return stmt.run({id});
     }
 
     public close(): void {

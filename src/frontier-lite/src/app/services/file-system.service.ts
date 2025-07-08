@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 // Import the ElectronAPI interface from electron.service.ts
 import { ElectronAPI } from '../electron.service';
-import { FeatureCollection } from '../models/geojson.interface';
+import { FeatureCollection } from 'geojson';
 
 export interface DataFile {
     name: string;

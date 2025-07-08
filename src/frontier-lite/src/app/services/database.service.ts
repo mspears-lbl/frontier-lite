@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from '../models/equipment';
+import { AddAnalysisProjectParams, AddRecordResult, AnalysisProject } from '../analysis/models/analysis-project';
 
 // declare global {
 //   interface Window {
@@ -42,5 +43,17 @@ export class DatabaseService {
 
     async deleteEquipmentCollection(id: string): Promise<{ success: boolean; result?: any; error?: string }> {
         return window.electronAPI.deleteEquipmentCollection(id);
+    }
+
+    async getProjects(): Promise<{ success: boolean; data?: AnalysisProject[]; error?: string }> {
+        return window.electronAPI.getProjects();
+    }
+
+    async addProject(params: AddAnalysisProjectParams): Promise<AddRecordResult> {
+        return window.electronAPI.addProject(params);
+    }
+
+    async deleteProject(id: string): Promise<AddRecordResult> {
+        return window.electronAPI.deleteProject(id);
     }
 }
