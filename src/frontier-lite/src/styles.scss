@@ -70,6 +70,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .fg-primary { color: colors.$primary !important; }
 .fg-primary-light { color: colors.$primary-light !important; }
+.fg-secondary { color: colors.$secondary !important; }
+.fg-secondary-light { color: colors.$secondary-light !important; }
+.fg-secondary-dark{ color: colors.$secondary-dark !important; }
 .fg-error { color: colors.$error !important; }
 .fg-success { color: colors.$success !important; }
 
