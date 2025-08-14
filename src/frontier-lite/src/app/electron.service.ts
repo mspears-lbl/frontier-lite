@@ -19,6 +19,7 @@ export interface ElectronAPI {
         error?: string
     }>;
     insertEquipment: (params: AddEquipmentParams) => Promise<{ success: boolean; result?: any; error?: string }>;
+    updateEquipment: (params: Equipment) => Promise<{ success: boolean; result?: any; error?: string }>;
     getEquipment: (collectionId: string) => Promise<{ success: boolean; data?: Equipment[]; error?: string }>;
     deleteEquipment: (id: string) => Promise<{ success: boolean; result?: any; error?: string }>;
     equipmentGroupNameExists: (name: string) => Promise<boolean>;

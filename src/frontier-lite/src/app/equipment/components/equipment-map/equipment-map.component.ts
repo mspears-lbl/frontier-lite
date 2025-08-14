@@ -126,7 +126,7 @@ export class EquipmentMapComponent {
             source: 'equipment-source',
             filter: ['==', '$type', 'LineString'],
             paint: {
-                'line-color': '#4264FB',
+                'line-color': '#FF6B6B',
                 'line-width': 2
             }
         });
@@ -218,7 +218,8 @@ export class EquipmentMapComponent {
         // Zoom to the bounds with some padding
         this.map.fitBounds(bounds, {
             padding: 50,
-            maxZoom: 15
+            maxZoom: 15,
+            animate: false
         });
     }
 
@@ -235,7 +236,8 @@ export class EquipmentMapComponent {
         // Zoom to the bounds with some padding
         this.map.fitBounds(bounds, {
             padding: 50,
-            maxZoom: 15
+            maxZoom: 15,
+            animate: false
         });
     }
 

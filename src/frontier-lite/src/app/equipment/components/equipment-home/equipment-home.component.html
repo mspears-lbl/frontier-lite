@@ -12,12 +12,20 @@
     Manage Equipment
 </h1>
 
-<!-- <app-equipment-collection-list></app-equipment-collection-list> -->
+<div class="app-info">
+    <mat-icon class="material-symbols-outlined">
+        info
+    </mat-icon>
+    <div class="info-content">
+        <h3>Equipment Management System</h3>
+        <p>Establish and maintain your equipment infrastructure by organizing equipment into logical groups, registering individual assets, and defining their operational locations.</p>
+    </div>
+</div>
 
 <div class="action-container flex-row">
     @if(form) {
-    <form [formGroup]="form">
-        <mat-form-field>
+    <form [formGroup]="form" class="flex-item flex-row">
+        <mat-form-field class="flex-item">
             <mat-label>Equipment Collection</mat-label>
             <mat-select formControlName="activeCollection">
                 @for (item of equipmentCollections; track item) {
@@ -31,22 +39,46 @@
     }
 
     <button mat-button [routerLink]="['./groups']">
+        <mat-icon class="material-symbols-outlined">
+            folder_managed
+        </mat-icon>
         Manage Equipment Groups
     </button>
 
     <button mat-button [routerLink]="['./create']">
+        <mat-icon class="material-symbols-outlined">
+            add
+        </mat-icon>
         Create Equipment
     </button>
 
     <button mat-button (click)="zoomToAll()">
+        <mat-icon class="material-symbols-outlined">
+            map
+        </mat-icon>
         View All Equipment
     </button>
 </div>
 
-<div class="flex-item flex-column">
-    <app-equipment-table (viewEquipment)="viewEquipmentHandler($event)">
-    </app-equipment-table>
+@if (hasEquipment) {
+<div class="flex-item flex-column" style="gap: 7px;">
 
-    <app-equipment-map [viewEquipment]="viewEquipment">
-    </app-equipment-map>
+        <app-equipment-table (viewEquipment)="viewEquipmentHandler($event)">
+        </app-equipment-table>
+
+        <app-equipment-map [viewEquipment]="viewEquipment">
+        </app-equipment-map>
+
 </div>
+}
+@else {
+    <div class="app-info">
+        <mat-icon class="material-symbols-outlined">
+            info
+        </mat-icon>
+        <div class="info-content">
+            <h3>No Equipment Found</h3>
+            <p>This collection currently contains no equipment assets. To begin managing your equipment inventory, use the Create Equipment button above to register your first asset.</p>
+        </div>
+    </div>
+}

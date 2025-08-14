@@ -4,7 +4,7 @@ import { computed, inject, effect } from '@angular/core';
 import { EquipmentCollectionStore } from './equipment-collection.store';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
-import { AddEquipmentParams, AddEquipmentResult, EquipmentCollection, EquipmentCollectionData } from '../../models/equipment';
+import { AddEquipmentParams, AddEquipmentResult, Equipment, EquipmentCollection, EquipmentCollectionData, UpdateResult } from '../../models/equipment';
 
 interface ActiveEquipmentCollectionState {
     data: EquipmentCollectionData | null | undefined;
@@ -74,6 +74,17 @@ export const ActiveEquipmentCollectionStore = signalStore(
             },
             addEquipment: async (params: AddEquipmentParams): Promise<AddEquipmentResult> => {
                 const result = await dbService.insertEquipment(params);
+                const current = store.data();
+                if (current) {
+                    patchState(store, { data: await getCollectionData(current) });
+                }
+                else {
+                    patchState(store, {data: undefined});
+                }
+                return result;
+            },
+            updateEquipment: async (equipment: Equipment): Promise<UpdateResult> => {
+                const result = await dbService.updateEquipment(equipment);
                 const current = store.data();
                 if (current) {
                     patchState(store, { data: await getCollectionData(current) });

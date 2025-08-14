@@ -32,6 +32,15 @@ export class DatabaseService {
         return stmt.run(stringParams);
     }
 
+    public updateEquipment(params: Equipment): Database.RunResult {
+        const stmt = this.db.prepare(queries['update-equipment']);
+        const stringParams = {
+            ...params,
+            geo: JSON.stringify(params.geo)
+        }
+        return stmt.run(stringParams);
+    }
+
     public getEquipment(collectionId: string): Equipment[] {
         const stmt = this.db.prepare(queries['get-equipment']);
         const results = stmt.all({collectionId}) as Equipment[];

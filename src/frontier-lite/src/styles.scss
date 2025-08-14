@@ -57,6 +57,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     text-align: center !important;
 }
 
+.app-cursor-pointer {
+    cursor: pointer;
+}
+
+.app-border-none {
+    border: 0 !important;
+}
+
+.app-mr-1 {
+    margin-right: 4px;
+}
+
 .app-card {
     .mat-mdc-card-header-text {
         flex: 1 !important;
@@ -65,8 +77,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 // Color utility classes
 .bg-primary { background-color: colors.$primary !important; }
-.bg-primary-light { background-color: colors.$primary-light; }
-.bg-primary-dark { background-color: colors.$primary-dark; }
+.bg-primary-light { background-color: colors.$primary-light !important; }
+.bg-primary-dark { background-color: colors.$primary-dark !important; }
 
 .fg-primary { color: colors.$primary !important; }
 .fg-primary-light { color: colors.$primary-light !important; }
@@ -74,26 +86,61 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fg-secondary-light { color: colors.$secondary-light !important; }
 .fg-secondary-dark{ color: colors.$secondary-dark !important; }
 .fg-error { color: colors.$error !important; }
+.fg-error-dark { color: colors.$error-dark !important; }
 .fg-success { color: colors.$success !important; }
 
-.bg-secondary { background-color: colors.$secondary; }
-.bg-secondary-light { background-color: colors.$secondary-light; }
-.bg-secondary-dark { background-color: colors.$secondary-dark; }
+.bg-secondary { background-color: colors.$secondary !important; }
+.bg-secondary-light { background-color: colors.$secondary-light !important; }
+.bg-secondary-dark { background-color: colors.$secondary-dark !important; }
 
 // .bg-tertiary { background-color: colors.$tertiary; }
 // .bg-tertiary-light { background-color: colors.$tertiary-light; }
 // .bg-tertiary-dark { background-color: colors.$tertiary-dark; }
 
-.text-primary { color: colors.$primary; }
-.text-secondary { color: colors.$secondary; }
+.text-primary { color: colors.$primary !important; }
+.text-secondary { color: colors.$secondary !important; }
 // .text-tertiary { color: colors.$tertiary; }
 
 .bg-error { background-color: colors.$error !important; }
-.bg-error-light { background-color: colors.$error-light; }
-.bg-error-dark { background-color: colors.$error-dark; }
+.bg-error-light { background-color: colors.$error-light !important; }
+.bg-error-dark { background-color: colors.$error-dark !important; }
 
 .warning-row {
     margin-top: 7px;
     font-size: 1.1rem;
 }
 
+
+.app-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    background-color: #f8f9fa;
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+
+    mat-icon {
+        color: #2196f3;
+        margin-top: 2px;
+    }
+
+    .info-content {
+        flex: 1;
+
+        h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #666;
+        }
+    }
+}

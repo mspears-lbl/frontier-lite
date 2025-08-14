@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { AddEquipmentParams } from './src/app/models/equipment';
+import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
 import { AddAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listFiles: () => ipcRenderer.invoke('list-files'),
   // Database methods
   insertEquipment: (params: AddEquipmentParams) => ipcRenderer.invoke('db:insert-equipment', params),
+  updateEquipment: (params: Equipment) => ipcRenderer.invoke('db:update-equipment', params),
   getEquipment: (collectionId: string) => ipcRenderer.invoke('db:get-equipment', collectionId),
   deleteEquipment: (id: string) => ipcRenderer.invoke('db:delete-equipment', id),
   equipmentGroupNameExists: (name: string) => ipcRenderer.invoke('db:equipment-group-name-exists', name),

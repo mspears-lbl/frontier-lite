@@ -4,12 +4,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ActiveCollectionStore } from '../../../stores/active-collection.store';
+import { MatMenuModule } from '@angular/material/menu';
 import { Subject } from 'rxjs';
 import { getEquipmentTypeName } from '../../../models/equipment-type';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogService } from '../../../components/confirm-dialog/confirm-dialog.service';
 import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 
 interface TableRow {
     id: string;
@@ -27,11 +29,14 @@ interface TableColumn {
     selector: 'app-equipment-table',
     imports: [
         CommonModule,
+        RouterModule,
         MatTableModule,
         MatButtonModule,
         MatIconModule,
         MatPaginatorModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatMenuModule
     ],
     templateUrl: './equipment-table.component.html',
     styleUrl: './equipment-table.component.scss'

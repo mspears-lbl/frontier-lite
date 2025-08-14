@@ -21,6 +21,10 @@ export class DatabaseService {
         return window.electronAPI.insertEquipment(params);
     }
 
+    async updateEquipment(params: Equipment): Promise<{ success: boolean; result?: any; error?: string }> {
+        return window.electronAPI.updateEquipment(params);
+    }
+
     async getEquipment(collectionId: string): Promise<{ success: boolean; data?: Equipment[]; error?: string }> {
         return window.electronAPI.getEquipment(collectionId);
     }

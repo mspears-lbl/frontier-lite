@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog, IpcMainInvokeEvent } from 'electro
 import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseService } from './database';
-import { AddEquipmentParams } from './src/app/models/equipment';
+import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
 import { AddAnalysisProjectParams, AddRecordResult } from './src/app/analysis/models/analysis-project';
 
 let mainWindow: BrowserWindow | null = null;
@@ -131,6 +131,16 @@ function createWindow(): void {
             return { success: true, result };
         } catch (error) {
             console.error('Error inserting equipment:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:update-equipment', async (event: IpcMainInvokeEvent, params: Equipment) => {
+        try {
+            const result = dbService.updateEquipment(params);
+            return { success: true, result };
+        } catch (error) {
+            console.error('Error updating equipment:', error);
             return { success: false, error: (error as Error).message };
         }
     });

@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { DatabaseService } from '../../../services/database.service';
-import { EquipmentCollection } from '../../../models/equipment';
+import { EquipmentCollection, EquipmentCollectionData } from '../../../models/equipment';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { EquipmentCollectionStore } from '../../stores/equipment-collection.store';
@@ -39,8 +39,13 @@ export class EquipmentHomeComponent {
 
     public viewEquipment = new EventEmitter<string | null>();
     public equipmentCollections: EquipmentCollection[] | null | undefined;
-    private activeCollection: EquipmentCollection | null | undefined;
+    private activeCollection: EquipmentCollectionData | null | undefined;
     public form: FormGroup | undefined;
+
+    get hasEquipment(): boolean {
+        return this.activeCollection && this.activeCollection.data.length > 0
+            ? true : false
+    }
 
     constructor(
         private dbService: DatabaseService,

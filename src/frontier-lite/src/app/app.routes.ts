@@ -23,6 +23,11 @@ export const routes: Routes = [
       import('./equipment/components/equipment-collection-list/equipment-collection-list.component').then((m) => m.EquipmentCollectionListComponent),
   },
   {
+    path: 'equipment/edit/:id',
+    loadComponent: () =>
+      import('./equipment/components/edit-equipment-info/edit-equipment-info.component').then((m) => m.EditEquipmentInfoComponent),
+  },
+  {
     path: 'analysis',
     pathMatch: 'full',
     loadComponent: () =>

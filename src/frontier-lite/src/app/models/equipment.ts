@@ -2,11 +2,22 @@ import { EquipmentType, isEquipmentType } from "./equipment-type";
 import { FeatureCollection, Feature } from 'geojson';
 
 export interface Equipment {
-    id: number;
+    id: string;
     equipmentType: EquipmentType;
     name: string;
     geo: Feature;
     created: Date;
+}
+
+export function isValidEquipment(value: any): value is Equipment {
+    return (
+        value &&
+        typeof value.id === 'string' &&
+        isEquipmentType(value.equipmentType) &&
+        typeof value.name === 'string' &&
+        value.name.trim().length > 0 &&
+        typeof value.geo === 'object'
+    );
 }
 
 export interface CreateEquipmentCollectionRequest {
@@ -34,6 +45,12 @@ export interface AddEquipmentResult {
     success: boolean;
     error?: any;
 }
+
+export interface UpdateResult {
+    success: boolean;
+    error?: any;
+}
+
 
 export function isAddEquipmentParams(value: any): value is AddEquipmentParams {
     return (

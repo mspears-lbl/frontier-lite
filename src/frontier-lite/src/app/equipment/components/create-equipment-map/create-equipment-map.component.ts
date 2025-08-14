@@ -26,6 +26,9 @@ export class CreateEquipmentMapComponent {
     @Input()
     equipmentType: Signal<EquipmentType> | null | undefined;
 
+    @Input()
+    initialLocation: Signal<Feature | null | undefined> | null | undefined;
+
     @Output()
     equipmentLocation = new EventEmitter<any>();
 
@@ -38,9 +41,21 @@ export class CreateEquipmentMapComponent {
     ) {
         // Subscribe to equipmentType signal changes
         effect(() => {
-            this.equipmentLocation.emit(undefined);
+            // this.equipmentLocation.emit(undefined);
             this.draw?.clear();
             this.setDrawMode();
+        });
+
+        // Subscribe to initialLocation signal changes
+        effect(() => {
+            const location = this.initialLocation?.();
+            console.log('initialLocation', location);
+            if (location && this.map) {
+                this.addInitialLocationLayer(location);
+                this.zoomToInitialLocation(location);
+            } else if (this.map) {
+                this.removeInitialLocationLayer();
+            }
         });
     }
 
@@ -67,6 +82,10 @@ export class CreateEquipmentMapComponent {
         this.map.on('style.load', () => {
             this.configureTerraDraw()
             this.addEquipmentLayer();
+            const location = this.initialLocation?.();
+            if (location) {
+                this.addInitialLocationLayer(location);
+            }
         });
     }
 
@@ -75,6 +94,7 @@ export class CreateEquipmentMapComponent {
         this.equipmentLocation.emit(undefined);
         this.draw?.clear();
         this.setDrawMode();
+        this.removeInitialLocationLayer();
     }
 
     public handleLocationSelect(location: LocationResult): void {
@@ -90,15 +110,23 @@ export class CreateEquipmentMapComponent {
         if (location.mapView && Array.isArray(location.mapView) && location.mapView.length === 4) {
             const [west, south, east, north] = location.mapView;
             const bounds = new LngLatBounds([west, south], [east, north]);
-            this.map.fitBounds(bounds, { padding: 50 });
+            this.map.fitBounds(bounds, { padding: 50, animate: false });
         }
         // Fallback to lat/lng coordinates
         else if (location.latitude && location.longitude) {
             this.map.flyTo({
                 center: [location.longitude, location.latitude],
-                zoom: 12
+                zoom: 12,
+                animate: false
             });
         }
+    }
+
+    private zoomToInitialLocation(feature: Feature): void {
+        if (!this.map) return;
+
+        const bounds = this.getBounds(feature);
+        this.map.fitBounds(bounds, { padding: 50, animate: false });
     }
 
     private configureTerraDraw(): void {
@@ -176,7 +204,7 @@ export class CreateEquipmentMapComponent {
             source: 'equipment-source',
             filter: ['==', '$type', 'LineString'],
             paint: {
-                'line-color': '#4264FB',
+                'line-color': '#FF6B6B',
                 'line-width': 2
             }
         });
@@ -281,7 +309,61 @@ export class CreateEquipmentMapComponent {
         // Zoom to the bounds with some padding
         this.map.fitBounds(bounds, {
             padding: 50,
-            maxZoom: 15
+            maxZoom: 15,
+            animate: false
         });
+    }
+
+    private addInitialLocationLayer(feature: Feature): void {
+        if (!this.map) return;
+
+        this.removeInitialLocationLayer();
+
+        this.map.addSource('initial-location-source', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: [feature]
+            }
+        });
+
+        if (feature.geometry.type === 'Point') {
+            this.map.addLayer({
+                id: 'initial-location-point',
+                type: 'circle',
+                source: 'initial-location-source',
+                paint: {
+                    'circle-radius': 6,
+                    'circle-color': '#007AFF',
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#FFFFFF'
+                }
+            });
+        } else if (feature.geometry.type === 'LineString') {
+            this.map.addLayer({
+                id: 'initial-location-line',
+                type: 'line',
+                source: 'initial-location-source',
+                paint: {
+                    'line-color': '#007AFF',
+                    'line-width': 3
+                }
+            });
+        }
+        this.draw?.setMode('static');
+    }
+
+    private removeInitialLocationLayer(): void {
+        if (!this.map) return;
+
+        if (this.map.getLayer('initial-location-point')) {
+            this.map.removeLayer('initial-location-point');
+        }
+        if (this.map.getLayer('initial-location-line')) {
+            this.map.removeLayer('initial-location-line');
+        }
+        if (this.map.getSource('initial-location-source')) {
+            this.map.removeSource('initial-location-source');
+        }
     }
 }
