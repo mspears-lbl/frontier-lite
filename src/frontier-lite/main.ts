@@ -30,7 +30,7 @@ function createWindow(): void {
     const isDev = !app.isPackaged;
     const indexPath = isDev 
         ? path.join(__dirname, '..', 'dist', 'poc', 'browser', 'index.html')
-        : path.join(__dirname, 'dist', 'poc', 'browser', 'index.html');
+        : path.join(process.resourcesPath, 'dist', 'poc', 'browser', 'index.html');
     mainWindow.loadFile(indexPath);
 
     ipcMain.on('message', (event, message: string) => {
