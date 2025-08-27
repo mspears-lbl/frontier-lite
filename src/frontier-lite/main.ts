@@ -27,7 +27,10 @@ function createWindow(): void {
         fs.mkdirSync(userFilesPath);
     }
 
-    const indexPath = path.join(__dirname, '..', 'dist', 'poc', 'browser', 'index.html');
+    const isDev = !app.isPackaged;
+    const indexPath = isDev 
+        ? path.join(__dirname, '..', 'dist', 'poc', 'browser', 'index.html')
+        : path.join(__dirname, 'dist', 'poc', 'browser', 'index.html');
     mainWindow.loadFile(indexPath);
 
     ipcMain.on('message', (event, message: string) => {
