@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
-import { AddAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest } from './src/app/analysis/models/analysis-project';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   sendMessage: (message: string) => ipcRenderer.send('message', message),
@@ -19,6 +19,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getEquipmentCollections: () => ipcRenderer.invoke('db:get-equipment-collections'),
   deleteEquipmentCollection: (id: string) => ipcRenderer.invoke('db:delete-equipment-collection', id),
   getProjects: () => ipcRenderer.invoke('db:get-projects'),
+  getProject: (id: string) => ipcRenderer.invoke('db:get-project', id),
   addProject: (params: AddAnalysisProjectParams) => ipcRenderer.invoke('db:add-project', params),
+  addProjectThreat: (params: AddProjectThreatRequest) => ipcRenderer.invoke('db:add-project-threat', params),
+  deleteProjectThreat: (id: string) => ipcRenderer.invoke('db:delete-project-threat', id),
   deleteProject: (id: string) => ipcRenderer.invoke('db:delete-project', id),
 });

@@ -1,5 +1,5 @@
 INSERT INTO
-    project (uuid, name)
+    project (uuid, name, description)
 values
-    (@uuid, @name)
+    (@uuid, @name, @description)
 ;

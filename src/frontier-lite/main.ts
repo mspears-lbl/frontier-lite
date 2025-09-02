@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
-import { AddAnalysisProjectParams, AddRecordResult } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProjectData } from './src/app/analysis/models/analysis-project';
 
 let mainWindow: BrowserWindow | null = null;
 let dbService: DatabaseService;
@@ -28,7 +28,7 @@ function createWindow(): void {
     }
 
     const isDev = !app.isPackaged;
-    const indexPath = isDev 
+    const indexPath = isDev
         ? path.join(__dirname, '..', 'dist', 'poc', 'browser', 'index.html')
         : path.join(process.resourcesPath, 'dist', 'poc', 'browser', 'index.html');
     mainWindow.loadFile(indexPath);
@@ -218,6 +218,16 @@ function createWindow(): void {
         }
     });
 
+    ipcMain.handle('db:get-project', async (event: IpcMainInvokeEvent, id: string) => {
+        try {
+            const data = dbService.getProject(id);
+            return { success: true, data: data };
+        } catch (error) {
+            console.error(`Error getting the analysis project for ${id}:`, error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
     ipcMain.handle('db:add-project', (event: IpcMainInvokeEvent, params: AddAnalysisProjectParams): AddRecordResult => {
         try {
             dbService.addProject(params);
@@ -227,6 +237,28 @@ function createWindow(): void {
             return { success: false, error: (error as Error).message };
         }
     });
+
+    ipcMain.handle('db:add-project-threat', (event: IpcMainInvokeEvent, params: AddProjectThreatRequest): AddRecordResult => {
+        try {
+            dbService.addProjectThreat(params);
+            return { success: true };
+        } catch (error) {
+            console.error('Error add project threat:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+
+    ipcMain.handle('db:delete-project-threat', async (event: IpcMainInvokeEvent, id: string) => {
+        try {
+            const result = dbService.deleteProjectThreat(id);
+            return { success: true, result };
+        } catch (error) {
+            console.error('Error deleting project threat:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
 
     ipcMain.handle('db:delete-project', async (event: IpcMainInvokeEvent, id: string) => {
         try {

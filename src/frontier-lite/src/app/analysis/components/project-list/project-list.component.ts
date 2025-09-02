@@ -10,6 +10,8 @@ import { getEquipmentTypeName } from '../../../models/equipment-type';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogService } from '../../../components/confirm-dialog/confirm-dialog.service';
 import { AnalysisProjectStore } from '../../stores/projects-store';
+import { RouterModule } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface TableRow {
     id: string;
@@ -28,11 +30,13 @@ interface TableColumn {
     selector: 'app-project-list',
     imports: [
         CommonModule,
+        RouterModule,
         MatTableModule,
         MatButtonModule,
         MatIconModule,
         MatPaginatorModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatTooltipModule
     ],
     templateUrl: './project-list.component.html',
     styleUrl: './project-list.component.scss'

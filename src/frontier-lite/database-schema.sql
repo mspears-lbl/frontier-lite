@@ -112,15 +112,52 @@ create table if not exists project (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+--------------------------
+-- Threat Scenario Type --
+--------------------------
+create table if not exists threat_type (
+    id integer primary key,
+    name text not null unique,
+    description text
+);
+
+insert into threat_type (
+    id,
+    name
+)
+with
+    w_values as (
+        select 1 as id, 'Water Inundation' as name union
+        select 2, 'Peak Ground Acceleration' union
+        select 3, 'Peak Ground Velocity' union
+        select 4, 'Soil Liquefaction Susceptibility' union
+        select 5, 'Wind' union
+        select 6, 'Wildfire' union
+        select 7, 'Other'
+    )
+select
+    n.id, n.name
+from
+    w_values as n
+left join
+    threat_type as e
+    on e.id = n.id
+where
+    e.id is null
+;
+
 --------------------
 -- project_threat --
 --------------------
 create table if not exists project_threat (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL,
-    threat_id TEXT not null,
+    uuid text not null unique,
+    name TEXT NOT NULL,
+    description TEXT,
+    threat_type_id integer not null,
     FOREIGN KEY (project_id) REFERENCES project (id),
-    unique (project_id, threat_id)
+    FOREIGN KEY (threat_type_id) REFERENCES threat_type (id)
 );
 
 ------------------------------
@@ -130,7 +167,7 @@ create table if not exists project_threat_equipment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_threat_id INTEGER NOT NULL,
     equipment_id INTEGER NOT NULL,
-    FOREIGN KEY (project_threat_id) REFERENCES project_threat (id),
+    FOREIGN KEY (project_threat_id) REFERENCES project_threat (id) ON DELETE CASCADE,
     FOREIGN KEY (equipment_id) REFERENCES equipment (id),
     unique (project_threat_id, equipment_id)
 );
@@ -178,7 +215,7 @@ create table if not exists threat_equipment_strategy (
     threat_equipment_id INTEGER NOT NULL,
     strategy_type_id INTEGER NOT NULL,
     obj text not null,
-    FOREIGN KEY (threat_equipment_id) REFERENCES threat_equipment (id),
+    FOREIGN KEY (threat_equipment_id) REFERENCES project_threat_equipment (id),
     FOREIGN KEY (strategy_type_id) REFERENCES strategy_type (id),
     unique (threat_equipment_id, strategy_type_id)
 );

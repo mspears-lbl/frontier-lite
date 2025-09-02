@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
-import { AddAnalysisProjectParams, AddRecordResult, AnalysisProject } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData } from './src/app/analysis/models/analysis-project';
 
 export class DatabaseService {
     private db: Database.Database;
@@ -93,8 +93,20 @@ export class DatabaseService {
     }
 
     public getProjects(): AnalysisProject[] {
-        const stmt = this.db.prepare(queries['get-project']);
+        const stmt = this.db.prepare(queries['get-projects']);
         return stmt.all() as AnalysisProject[];
+    }
+
+    public getProject(id: string): AnalysisProjectData {
+        const stmt = this.db.prepare(queries['get-project']);
+        stmt.bind({id})
+        const results = stmt.get() as any;
+        console.log('get project results...');
+        console.log(results);
+        return {
+            ...results,
+            threats: JSON.parse(results.threats)
+        };
     }
 
     public addProject(params: AddAnalysisProjectParams): Database.RunResult {
@@ -105,6 +117,27 @@ export class DatabaseService {
             uuid
         });
     }
+
+    public addProjectThreat(params: AddProjectThreatRequest): Database.RunResult {
+        const uuid = v4();
+        const stmt = this.db.prepare(queries['insert-project-threat']);
+        console.log('add project threat params...');
+        console.log({
+            ...params,
+            uuid
+        });
+        return stmt.run({
+            ...params,
+            uuid
+        });
+    }
+
+    public deleteProjectThreat(id: string): Database.RunResult {
+        const stmt = this.db.prepare(queries['delete-project-threat']);
+        return stmt.run({ id });
+    }
+
+
 
     public deleteProject(id: string): Database.RunResult {
         const stmt = this.db.prepare(queries['delete-project']);

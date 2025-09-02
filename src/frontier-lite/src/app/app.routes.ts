@@ -33,4 +33,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./analysis/components/analysis-home/analysis-home.component').then((m) => m.AnalysisHomeComponent),
   },
+  {
+    path: 'analysis/:id',
+    loadComponent: () =>
+      import('./analysis/components/project-analysis-home/project-analysis-home.component').then((m) => m.ProjectAnalysisHomeComponent),
+  },
 ];

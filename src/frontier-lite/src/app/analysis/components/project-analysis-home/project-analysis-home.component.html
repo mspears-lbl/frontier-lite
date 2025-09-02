@@ -1,0 +1,48 @@
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back
+    </button>
+    Analysis Project
+</h1>
+
+<h2 class="text-center">
+    {{name}}
+</h2>
+
+<h3 class="text-center">
+    Threats
+</h3>
+
+<div>
+    <button mat-button (click)="addThreat()">Add Threat</button>
+</div>
+
+<mat-accordion>
+    @for (threat of threats; track threat.id) {
+    <mat-expansion-panel>
+
+        <mat-expansion-panel-header>
+
+            <mat-panel-title class="app-flex-gap">
+                <mat-icon class="material-symbols-outlined">
+                    {{getThreatIcon(threat.threatType)}}
+                </mat-icon>
+
+                {{threat.name}}
+            </mat-panel-title>
+
+            <mat-panel-description>
+                {{threat.description}}
+            </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <app-project-threat-view [projectThreat]="threat"></app-project-threat-view>
+
+    </mat-expansion-panel>
+    }
+</mat-accordion>
