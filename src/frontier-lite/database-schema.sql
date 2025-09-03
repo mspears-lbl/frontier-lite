@@ -52,6 +52,27 @@ create table if not exists equipment_collection (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+insert into equipment_collection (
+    uuid,
+    name
+)
+with
+    w_values as (
+        select '6d8b6025-0ffb-4fc6-9a8c-fc675c115d8c' as uuid, 'Default' as name
+    )
+select
+    n.uuid, n.name
+from
+    w_values as n
+left join
+    equipment_collection as e
+    on e.uuid = n.uuid
+where
+    e.id is null
+;
+
+
+
 --------------------
 -- equipment_type --
 --------------------
@@ -214,7 +235,8 @@ create table if not exists threat_equipment_strategy (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     threat_equipment_id INTEGER NOT NULL,
     strategy_type_id INTEGER NOT NULL,
-    obj text not null,
+    name text not null,
+    constants text not null,
     FOREIGN KEY (threat_equipment_id) REFERENCES project_threat_equipment (id),
     FOREIGN KEY (strategy_type_id) REFERENCES strategy_type (id),
     unique (threat_equipment_id, strategy_type_id)

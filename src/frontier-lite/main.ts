@@ -194,6 +194,7 @@ function createWindow(): void {
             return { success: true, data: collections };
         } catch (error) {
             console.error('Error getting equipment collections:', error);
+            console.log(error);
             return { success: false, error: (error as Error).message };
         }
     });
