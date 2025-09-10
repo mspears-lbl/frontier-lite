@@ -40,7 +40,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     justify-content: center;
 }
 
-.flex-center-gap,.app-flex-gap {
+.flex-center-gap,.flex-gap,.app-flex-gap {
     gap: 7px;
 }
 
@@ -75,10 +75,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-left: 20px !important;
     margin-right: 20px !important;
 }
+.app-mb-1 {
+    margin-bottom: 4px;
+}
+.app-mb-2 {
+    margin-bottom: 8px;
+}
 
 .app-plr-1 {
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.app-plr-2 {
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .app-card {
@@ -86,6 +97,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         flex: 1 !important;
     }
 }
+
+.app-dense-button {
+    @include mat.all-component-densities(-4);
+  }
 
 // Color utility classes
 .bg-primary { background-color: colors.$primary !important; }
@@ -155,4 +170,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
             color: #666;
         }
     }
+}
+
+.strategy-edit-row {
+    min-height: 70px !important;
+    max-height: 70px !important;
+    overflow-y: visible;
+    border: 1px gray solid;
 }

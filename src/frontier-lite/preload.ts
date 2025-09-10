@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
 import { AddAnalysisProjectParams, AddProjectThreatRequest } from './src/app/analysis/models/analysis-project';
+import { AddResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   sendMessage: (message: string) => ipcRenderer.send('message', message),
@@ -13,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   insertEquipment: (params: AddEquipmentParams) => ipcRenderer.invoke('db:insert-equipment', params),
   updateEquipment: (params: Equipment) => ipcRenderer.invoke('db:update-equipment', params),
   getEquipment: (collectionId: string) => ipcRenderer.invoke('db:get-equipment', collectionId),
+  getEquipmentById: (equipmentId: string) => ipcRenderer.invoke('db:get-equipment-by-id', equipmentId),
   deleteEquipment: (id: string) => ipcRenderer.invoke('db:delete-equipment', id),
   equipmentGroupNameExists: (name: string) => ipcRenderer.invoke('db:equipment-group-name-exists', name),
   insertEquipmentCollection: (name: string) => ipcRenderer.invoke('db:insert-equipment-collection', name),
@@ -22,6 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getProject: (id: string) => ipcRenderer.invoke('db:get-project', id),
   addProject: (params: AddAnalysisProjectParams) => ipcRenderer.invoke('db:add-project', params),
   addProjectThreat: (params: AddProjectThreatRequest) => ipcRenderer.invoke('db:add-project-threat', params),
+  addThreatStrategies: (params: AddResilienceCalcData[]) => ipcRenderer.invoke('db:add-threat-strategies', params),
   deleteProjectThreat: (id: string) => ipcRenderer.invoke('db:delete-project-threat', id),
   deleteProject: (id: string) => ipcRenderer.invoke('db:delete-project', id),
 });

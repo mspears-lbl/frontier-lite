@@ -1,4 +1,8 @@
 import { isThreatType, ThreatType } from "../../models/threats";
+import { CalcParams } from "./portfolio-calculator";
+import { ResilienceCalcFinal } from "./portfolio-calculator/calculator-final";
+import { ResilienceCalcInitial } from "./portfolio-calculator/calculator-initial";
+import { ResilienceCalcIntermediate } from "./portfolio-calculator/calculator-intermediate";
 import { ResilienceStrategyType } from "./resilience-strategy";
 
 export interface AnalysisProject {
@@ -26,11 +30,11 @@ export interface AddRecordResult {
     error?: any;
 }
 
-export interface ProjectThreatEquipment {
-    equipmentId: string;
-    strategyType: ResilienceStrategyType;
-    calcConstants: any;
-}
+// export interface ProjectThreatEquipment {
+//     equipmentId: string;
+//     strategyType: ResilienceStrategyType;
+//     calcConstants: any;
+// }
 
 export interface AddProjectThreatRequest {
     projectId: string;
@@ -51,12 +55,27 @@ export function isAddProjectThreatRequest(value: any): value is AddProjectThreat
     );
 }
 
+export interface ThreatStrategyData {
+    calcParams: CalcParams;
+	outputInitial: ResilienceCalcInitial;
+	outputIntermediate: ResilienceCalcIntermediate;
+	outputFinal: ResilienceCalcFinal;
+}
+
+export interface ProjectThreatStrategy {
+    id: number;
+    equipmentId: string;
+    strategyType: ResilienceStrategyType;
+    data: ThreatStrategyData;
+}
+
 export interface ProjectThreat {
     id: string;
     name: string;
     description: string | null | undefined;
     threatType: ThreatType;
-    equipment: ProjectThreatEquipment[];
+    // equipment: ProjectThreatEquipment[];
+    strategies: ProjectThreatStrategy[] | null | undefined;
 }
 
 export interface AnalysisProjectData extends AnalysisProject {

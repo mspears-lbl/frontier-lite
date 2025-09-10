@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
 import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProjectData } from './src/app/analysis/models/analysis-project';
+import { AddResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
 
 let mainWindow: BrowserWindow | null = null;
 let dbService: DatabaseService;
@@ -199,6 +200,18 @@ function createWindow(): void {
         }
     });
 
+    ipcMain.handle('db:get-equipment-by-id', async (event: IpcMainInvokeEvent, equipmentId: string) => {
+        try {
+            const results = dbService.getEquipmentById(equipmentId);
+            return { success: true, data: results };
+        } catch (error) {
+            console.error(`Error getting equipment with id ${equipmentId}:`, error);
+            console.log(error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+
     ipcMain.handle('db:delete-equipment-collection', async (event: IpcMainInvokeEvent, id: string) => {
         try {
             const result = dbService.deleteEquipmentCollection(id);
@@ -242,6 +255,20 @@ function createWindow(): void {
     ipcMain.handle('db:add-project-threat', (event: IpcMainInvokeEvent, params: AddProjectThreatRequest): AddRecordResult => {
         try {
             dbService.addProjectThreat(params);
+            return { success: true };
+        } catch (error) {
+            console.error('Error add project threat:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:add-threat-strategies', (event: IpcMainInvokeEvent, params: AddResilienceCalcData[]): AddRecordResult => {
+        try {
+            console.log('add-threat-strategies');
+            console.log(params);
+            const results = dbService.addThreatStrategies(params);
+            console.log('success');
+            console.log(results);
             return { success: true };
         } catch (error) {
             console.error('Error add project threat:', error);

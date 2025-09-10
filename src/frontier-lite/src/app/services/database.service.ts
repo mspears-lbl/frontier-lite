@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from '../models/equipment';
 import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData } from '../analysis/models/analysis-project';
+import { AddResilienceCalcData } from '../analysis/models/portfolio-calculator';
 
 // declare global {
 //   interface Window {
@@ -27,6 +28,10 @@ export class DatabaseService {
 
     async getEquipment(collectionId: string): Promise<{ success: boolean; data?: Equipment[]; error?: string }> {
         return window.electronAPI.getEquipment(collectionId);
+    }
+
+    async getEquipmentById(equipmentId: string): Promise<{ success: boolean; data?: Equipment; error?: string }> {
+        return window.electronAPI.getEquipmentById(equipmentId);
     }
 
     async deleteEquipment(id: string): Promise<{ success: boolean; result?: any; error?: string }> {
@@ -63,6 +68,10 @@ export class DatabaseService {
 
     async addProjectThreat(params: AddProjectThreatRequest): Promise<AddRecordResult> {
         return window.electronAPI.addProjectThreat(params);
+    }
+
+    async addThreatStrategies(params: AddResilienceCalcData[]): Promise<AddRecordResult> {
+        return window.electronAPI.addThreatStrategies(params);
     }
 
     async deleteProjectThreat(id: string): Promise<AddRecordResult> {

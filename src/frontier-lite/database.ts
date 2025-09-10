@@ -6,6 +6,8 @@ import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
 import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData } from './src/app/analysis/models/analysis-project';
+import { AddResilienceCalcData, ResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
+import { ResilienceStrategyType } from './src/app/analysis/models/resilience-strategy';
 
 export class DatabaseService {
     private db: Database.Database;
@@ -51,6 +53,18 @@ export class DatabaseService {
             geo: JSON.parse(`${item.geo}`)
         }));
     }
+
+    public getEquipmentById(equipmentId: string): Equipment {
+        const stmt = this.db.prepare(queries['get-equipment-by-id']);
+        const results = stmt.get({equipmentId}) as any;
+        console.log(`get equiopment by id ${equipmentId} results...`);
+        console.log(results);
+        return {
+            ...results,
+            geo: JSON.parse(`${results.geo}`)
+        };
+    }
+
 
     public deleteEquipment(id: string): Database.RunResult {
         const stmt = this.db.prepare(queries['delete-equipment']);
@@ -103,10 +117,35 @@ export class DatabaseService {
         const results = stmt.get() as any;
         console.log('get project results...');
         console.log(results);
-        return {
+        const trans = {
             ...results,
             threats: JSON.parse(results.threats)
         };
+        if (trans.threats && Array.isArray(trans.threats)) {
+            console.log('yes threats is array...')
+            let threats = [];
+            for (let threat of trans.threats) {
+                if (threat.strategies) {
+                    console.log('strategies exists...');
+                    // console.log(threat.strategies);
+                    const strategies = JSON.parse(threat.strategies);
+                    for (let strategy of strategies) {
+                        if (strategy.data) {
+                            strategy.data = JSON.parse(strategy.data);
+                        }
+                    }
+                    threats.push({
+                        ...threat,
+                        strategies
+                    })
+                }
+                else {
+                    threats.push(threat);
+                }
+            }
+            trans.threats = threats;
+        }
+        return trans;
     }
 
     public addProject(params: AddAnalysisProjectParams): Database.RunResult {
@@ -130,6 +169,26 @@ export class DatabaseService {
             ...params,
             uuid
         });
+    }
+
+    public addThreatStrategies(params: AddResilienceCalcData[]): Database.RunResult[] {
+        interface Params {
+            threatId: string;
+            equipmentId: string;
+            strategyType: ResilienceStrategyType;
+            data: string;
+        }
+        const queryParams: Params[] = params.map(item => ({
+            threatId: item.threatId,
+            equipmentId: item.equipmentId,
+            strategyType: item.strategyType,
+            data: JSON.stringify(item.data)
+        }))
+        const results = queryParams.map(queryParam => {
+            const stmt = this.db.prepare(queries['insert-threat-equipment']);
+            return stmt.run(queryParam);
+        })
+        return results;
     }
 
     public deleteProjectThreat(id: string): Database.RunResult {

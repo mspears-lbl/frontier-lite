@@ -4,6 +4,7 @@ import { inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
 import { AddProjectThreatRequest, AnalysisProject, AnalysisProjectData } from '../models/analysis-project';
+import { AddResilienceCalcData } from '../models/portfolio-calculator';
 
 interface ActiveProjectState {
     data: AnalysisProjectData | null | undefined;
@@ -87,6 +88,19 @@ export const ActiveProjectStore = signalStore(
                 }
                 return results;
             },
+            addThreatStrategies: async (params: AddResilienceCalcData[]) => {
+                const current = store.data();
+                const results = await dbService.addThreatStrategies(params)
+                if (results.success && current?.id) {
+                    const results = await getData(current.id);
+                    const data = results
+                        ? deepCopy(results)
+                        : undefined;
+                    patchState(store, { data });
+                }
+                return results;
+
+            }
             // removeProject: async (id: string) => {
             //     await dbService.deleteProject(id);
             //     const results = await dbService.getProjects();

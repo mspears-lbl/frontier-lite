@@ -94,6 +94,15 @@ export const ActiveEquipmentCollectionStore = signalStore(
                 }
                 return result;
             },
+            getEquipment: (id: string): Equipment => {
+                const current = store.data();
+                if (current) {
+                    return current.data.find(item => item.id === id)!;
+                }
+                else {
+                    throw new Error(`No active equipment collection`);
+                }
+            },
             // loadData: async () => {
             //     const results = await dbService.getActiveEquipmentCollections();
             //     const data = results?.data

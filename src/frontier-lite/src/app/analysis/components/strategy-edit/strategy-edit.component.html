@@ -1,0 +1,325 @@
+<h3 class="text-center">
+    {{strategyName}}
+</h3>
+
+@if(form) {
+    <form [formGroup]="form">
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Strategy Name</mat-label>
+                <input matInput placeholder="Strategy Name"
+                formControlName="name">
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Customers Affected</mat-label>
+                <input matInput placeholder="Customers Affected"
+                formControlName="customers">
+                <span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            People
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.CustomersAffected)"
+                        class="material-symbols-outlined">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Outage Duration</mat-label>
+                <input matInput placeholder="Outage Duration"
+                formControlName="outageDuration">
+                <span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            Hours
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.OutageDuration)"
+                        class="material-symbols-outlined">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Threat Frequency</mat-label>
+                <input matInput placeholder="Threat Frequency"
+                formControlName="threatFrequency">
+                <span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            %
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.ThreatFrequency)"
+                        class="material-symbols-outlined">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Lifespan</mat-label>
+                <input matInput placeholder="Lifespan"
+                formControlName="lifespan">
+                <span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            Years
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.OutageDuration)"
+                        class="material-symbols-outlined">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Discount Rate</mat-label>
+                <input matInput placeholder="Discount Rate"
+                formControlName="discountRate">
+                <span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            %
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.DiscountRate)"
+                        class="material-symbols-outlined">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="benefit-value">
+                ${{outputFinal?.benefit | number:'1.0-0'}}
+            </span>
+        </div>
+
+        <!-- Costs -->
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Annual Avoided Utility Costs</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="Annual Avoided Utility Costs"
+                formControlName="avoidedUtilityCost">
+                <span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            year
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedUtilityCostsYear)" color="primary">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Annual Avoided Customer Costs</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="Annual Avoided Customer Costs"
+                formControlName="annualAvoidedCustomerCost">
+                <span span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            year
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedCustomerCostsYear)" color="primary">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Annual Avoided Other Costs</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="Annual Avoided Other Costs"
+                formControlName="avoidedOtherCost">
+                <span span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            year
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedOtherCostsYear)" color="primary">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="benefit-value">
+                ${{outputFinal?.cost | number:'1.0-0'}}
+            </span>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Cap Ex</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="Cap Ex"
+                formControlName="capEx">
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>OM Cost</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="OM Cost"
+                formControlName="omCost">
+                <span span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            year
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedOtherCostsYear)" color="primary">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Annual Fixed Cost</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="Annual Fixed Cost"
+                formControlName="annualFixedCost">
+                <span span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            year
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedOtherCostsYear)" color="primary">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row app-plr-2 strategy-edit-row">
+            <mat-form-field class="flex-item">
+                <mat-label>Annual Other Cost</mat-label>
+                <span matPrefix class="prefix-label">$</span>
+                <input matInput placeholder="Annual Other Cost"
+                formControlName="annualOtherCost">
+                <span span matSuffix class="suffix-label">
+                    <div class="flex-row flex-align-row-items">
+                        <span>
+                            year
+                        </span>
+                        <!-- <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedOtherCostsYear)" color="primary">
+                            info_circle
+                        </mat-icon> -->
+                    </div>
+                </span>
+            </mat-form-field>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="benefit-value">
+                {{benefitCostRatio | number:'1.2-2'}}
+            </span>
+        </div>
+
+        <span class="slider-container  strategy-edit-row">
+            <!-- <span class="index-title flex-row flex-align-row-items">
+                <span>
+                    Supply Chain Interdependency Index
+                </span>
+                <mat-icon [matTooltip]="getFieldDescription(fields.SupplyChainInterdependencyIndex)" color="primary">
+                    info_circle
+                </mat-icon>
+            </span> -->
+            <div class="slider-content app-plr-2">
+                <span class="index-value">1</span>
+                <mat-slider showTickMarks min="1" max="10" step="1" style="flex: 1;" color="accent" discrete="true">
+                    <input #scIndex matSliderThumb formControlName="supplyChainIndex">
+                </mat-slider>
+                <span class="index-value">10</span>
+            </div>
+        </span>
+
+        <span class="slider-container strategy-edit-row">
+            <!-- <span class="index-title flex-row flex-align-row-items">
+                <span>
+                    Supply Chain Interdependency Index
+                </span>
+                <mat-icon [matTooltip]="getFieldDescription(fields.SupplyChainInterdependencyIndex)" color="primary">
+                    info_circle
+                </mat-icon>
+            </span> -->
+            <div class="slider-content app-plr-2">
+                <span class="index-value">1</span>
+                <mat-slider showTickMarks min="1" max="10" step="1" style="flex: 1;" color="accent" discrete="true">
+                    <input #scIndex matSliderThumb formControlName="communitySupportIndex">
+                </mat-slider>
+                <span class="index-value">10</span>
+            </div>
+        </span>
+
+        <span class="slider-container strategy-edit-row">
+            <!-- <span class="index-title flex-row flex-align-row-items">
+                <span>
+                    Supply Chain Interdependency Index
+                </span>
+                <mat-icon [matTooltip]="getFieldDescription(fields.SupplyChainInterdependencyIndex)" color="primary">
+                    info_circle
+                </mat-icon>
+            </span> -->
+            <div class="slider-content app-plr-2">
+                <span class="index-value">1</span>
+                <mat-slider showTickMarks min="1" max="10" step="1" style="flex: 1;" color="accent" discrete="true">
+                    <input #scIndex matSliderThumb formControlName="energyIndependenceIndex">
+                </mat-slider>
+                <span class="index-value">10</span>
+            </div>
+        </span>
+
+        <span class="slider-container strategy-edit-row">
+            <!-- <span class="index-title flex-row flex-align-row-items">
+                <span>
+                    Supply Chain Interdependency Index
+                </span>
+                <mat-icon [matTooltip]="getFieldDescription(fields.SupplyChainInterdependencyIndex)" color="primary">
+                    info_circle
+                </mat-icon>
+            </span> -->
+            <div class="slider-content  app-plr-2">
+                <span class="index-value">1</span>
+                <mat-slider showTickMarks min="1" max="10" step="1" style="flex: 1;" color="accent" discrete="true">
+                    <input #scIndex matSliderThumb formControlName="sustainabilityIndex">
+                </mat-slider>
+                <span class="index-value">10</span>
+            </div>
+        </span>
+    </form>
+}

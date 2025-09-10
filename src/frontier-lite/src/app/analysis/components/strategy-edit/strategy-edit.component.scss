@@ -1,0 +1,28 @@
+:host {
+    border: 1px dodgerblue solid;
+    max-width: 300px;
+}
+
+.benefit-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.slider-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .index-title {
+        flex: 0;
+    }
+    .slider-content {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+    }
+}
+.index-value {
+    margin-top: 12px;
+    // font-size: 14px;
+}

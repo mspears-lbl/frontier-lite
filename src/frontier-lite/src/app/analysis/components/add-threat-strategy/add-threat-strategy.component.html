@@ -1,0 +1,221 @@
+<div>
+    <button mat-button (click)="backToEquipment()">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back to Equipment Selection
+    </button>
+    <button mat-button (click)="addStrategies()">
+        <mat-icon class="material-symbols-outlined">
+            check
+        </mat-icon>
+        Add Strategies to Project
+    </button>
+</div>
+
+<div class="flex-row">
+    <div class="flex-item" style="padding-top: 60px;">
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Strategy Name
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Customers Affected
+                <mat-icon [matTooltip]="getFieldDescription(fields.CustomersAffected)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Outage Duration (Hours)
+                <mat-icon [matTooltip]="getFieldDescription(fields.OutageDuration)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Threat Frequency
+                <mat-icon [matTooltip]="getFieldDescription(fields.ThreatFrequency)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Assumed Lifespan (years)
+                <mat-icon [matTooltip]="getFieldDescription(fields.AssumedLifespanYears)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Discount Rate
+                <mat-icon [matTooltip]="getFieldDescription(fields.DiscountRate)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Benefits
+                <mat-icon [matTooltip]="getFieldDescription(fields.BenefitsNpv)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Avoided Utility Cost
+                <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedUtilityCostsYear)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Annual Avoided Customer Cost
+                <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedCustomerCostsYear)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Avoided Other Cost
+                <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedOtherCostsYear)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Costs
+                <mat-icon [matTooltip]="getFieldDescription(fields.CostsNpv)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Cap Ex
+                <mat-icon [matTooltip]="getFieldDescription(fields.CapitalInvestment)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                OM Cost
+                <mat-icon [matTooltip]="getFieldDescription(fields.AnnualOMCostsYear)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Annual Fixed Cost
+                <mat-icon [matTooltip]="getFieldDescription(fields.AnnualFixedCostsYear)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Annual Other Costs
+                <mat-icon [matTooltip]="getFieldDescription(fields.AnnualOtherCostsYear)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Benefit-Cost Ratio
+                <mat-icon [matTooltip]="getFieldDescription(fields.BenefitCostRatio)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Supply Chain Interdependency Index
+                <mat-icon [matTooltip]="getFieldDescription(fields.SupplyChainInterdependencyIndex)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Community Support Index
+                <mat-icon [matTooltip]="getFieldDescription(fields.CommunitySupportIndex)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Energy Independence Index
+                <mat-icon [matTooltip]="getFieldDescription(fields.EnergyIndependenceIndex)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+            <span class="row-label flex-row flex-align-row-items flex-gap">
+                Sustainability Index
+                <mat-icon [matTooltip]="getFieldDescription(fields.SustainabilityIndex)"
+                class="material-symbols-outlined fg-secondary-dark">
+                    info_circle
+                </mat-icon>
+            </span>
+        </div>
+
+    </div>
+    @for (item of strategyCalcs; track item.calcParams.inputData.strategyType) {
+        <app-strategy-edit class="flex-item" [params]="item"
+        (valueChange)="strategyChange($event)">
+        </app-strategy-edit>
+    }
+</div>

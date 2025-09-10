@@ -52,24 +52,24 @@ create table if not exists equipment_collection (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-insert into equipment_collection (
-    uuid,
-    name
-)
-with
-    w_values as (
-        select '6d8b6025-0ffb-4fc6-9a8c-fc675c115d8c' as uuid, 'Default' as name
-    )
-select
-    n.uuid, n.name
-from
-    w_values as n
-left join
-    equipment_collection as e
-    on e.uuid = n.uuid
-where
-    e.id is null
-;
+-- insert into equipment_collection (
+--     uuid,
+--     name
+-- )
+-- with
+--     w_values as (
+--         select '6d8b6025-0ffb-4fc6-9a8c-fc675c115d8c' as uuid, 'Default' as name
+--     )
+-- select
+--     n.uuid, n.name
+-- from
+--     w_values as n
+-- left join
+--     equipment_collection as e
+--     on e.uuid = n.uuid
+-- where
+--     e.id is null
+-- ;
 
 
 
@@ -181,18 +181,6 @@ create table if not exists project_threat (
     FOREIGN KEY (threat_type_id) REFERENCES threat_type (id)
 );
 
-------------------------------
--- project_threat_equipment --
-------------------------------
-create table if not exists project_threat_equipment (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    project_threat_id INTEGER NOT NULL,
-    equipment_id INTEGER NOT NULL,
-    FOREIGN KEY (project_threat_id) REFERENCES project_threat (id) ON DELETE CASCADE,
-    FOREIGN KEY (equipment_id) REFERENCES equipment (id),
-    unique (project_threat_id, equipment_id)
-);
-
 -------------------
 -- strategy_type --
 -------------------
@@ -233,11 +221,27 @@ where
 -------------------------------
 create table if not exists threat_equipment_strategy (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    threat_equipment_id INTEGER NOT NULL,
+    project_threat_id INTEGER NOT NULL,
+    equipment_id INTEGER NOT NULL,
     strategy_type_id INTEGER NOT NULL,
-    name text not null,
-    constants text not null,
-    FOREIGN KEY (threat_equipment_id) REFERENCES project_threat_equipment (id),
+    data TEXT NOT NULL,
+    FOREIGN KEY (project_threat_id) REFERENCES project_threat (id) ON DELETE CASCADE,
     FOREIGN KEY (strategy_type_id) REFERENCES strategy_type (id),
-    unique (threat_equipment_id, strategy_type_id)
+    FOREIGN KEY (equipment_id) REFERENCES equipment (id)
+    -- unique (project_threat_id, equipment_id)
 );
+
+
+-- -------------------------------
+-- -- threat_equipment_strategy --
+-- -------------------------------
+-- create table if not exists threat_equipment_strategy (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     threat_equipment_id INTEGER NOT NULL,
+--     strategy_type_id INTEGER NOT NULL,
+--     name text not null,
+--     constants text not null,
+--     FOREIGN KEY (threat_equipment_id) REFERENCES project_threat_equipment (id),
+--     FOREIGN KEY (strategy_type_id) REFERENCES strategy_type (id),
+--     unique (threat_equipment_id, strategy_type_id)
+-- );
