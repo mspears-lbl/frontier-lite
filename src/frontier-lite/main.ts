@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProjectData } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
 import { AddResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
 
 let mainWindow: BrowserWindow | null = null;
@@ -262,6 +262,16 @@ function createWindow(): void {
         }
     });
 
+    ipcMain.handle('db:update-project-threat', (event: IpcMainInvokeEvent, params: ProjectThreatUpdateParams): AddRecordResult => {
+        try {
+            dbService.updateProjectThreat(params);
+            return { success: true };
+        } catch (error) {
+            console.error('Error update project threat:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
     ipcMain.handle('db:add-threat-strategies', (event: IpcMainInvokeEvent, params: AddResilienceCalcData[]): AddRecordResult => {
         try {
             console.log('add-threat-strategies');
@@ -272,6 +282,30 @@ function createWindow(): void {
             return { success: true };
         } catch (error) {
             console.error('Error add project threat:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:update-threat-strategy', (event: IpcMainInvokeEvent, params: ProjectThreatStrategy): AddRecordResult => {
+        try {
+            console.log('update-threat-strategy');
+            console.log(params);
+            const results = dbService.updateThreatStrategy(params);
+            console.log('success');
+            console.log(results);
+            return { success: true };
+        } catch (error) {
+            console.error('Error update threat strategy:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:delete-threat-strategy', async (event: IpcMainInvokeEvent, id: number) => {
+        try {
+            const result = dbService.deleteThreatStrategy(id);
+            return { success: true, result };
+        } catch (error) {
+            console.error(`Error deleting threat strategy ${id}:`, error);
             return { success: false, error: (error as Error).message };
         }
     });

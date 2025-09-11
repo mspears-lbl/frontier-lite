@@ -8,7 +8,7 @@ import { MessageService } from '../../../services/message.service';
 import { Subject } from 'rxjs';
 import { ActiveProjectStore } from '../../stores/active-project.store';
 import { AddProjectThreatRequest, AnalysisProjectData, ProjectThreat } from '../../models/analysis-project';
-import { getThreatIcon, ThreatType } from '../../../models/threats';
+import { getThreatIcon, getThreatName, ThreatType } from '../../../models/threats';
 import { NewProjectThreatService } from '../new-project-threat/new-project-threat.service';
 import { CommonModule } from '@angular/common';
 import { ProjectThreatViewComponent } from '../project-threat-view/project-threat-view.component';
@@ -38,6 +38,7 @@ export class ProjectAnalysisHomeComponent {
     get threats(): ProjectThreat[] {
         return this.project?.threats || [];
     }
+    public dataChanged$ = new Subject<void>();
 
     constructor(
         private fb: FormBuilder,
@@ -50,6 +51,7 @@ export class ProjectAnalysisHomeComponent {
     }
 
     ngOnInit() {
+        this.dataChanged$ = new Subject<void>();
         this.setIdFromRoute();
     }
 
@@ -65,6 +67,7 @@ export class ProjectAnalysisHomeComponent {
         effect(() => {
             this.project = this.store.data();
             console.log('store data changed...', this.project);
+            this.dataChanged$.next();
         });
     }
 
@@ -84,12 +87,16 @@ export class ProjectAnalysisHomeComponent {
         this.newThreatService.open({projectId: this.project.id})
             .subscribe((result: boolean) => {
                 if (result) {
-                    this.loadProject();
+                    this.store.reloadData();
                 }
             });
     }
 
     public getThreatIcon(threatType: ThreatType): string {
         return getThreatIcon(threatType);
+    }
+
+    public getThreatName(threatType: ThreatType): string {
+        return getThreatName(threatType);
     }
 }

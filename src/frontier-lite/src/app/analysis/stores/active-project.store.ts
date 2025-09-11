@@ -3,7 +3,7 @@ import { patchState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
-import { AddProjectThreatRequest, AnalysisProject, AnalysisProjectData } from '../models/analysis-project';
+import { AddProjectThreatRequest, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatUpdateParams } from '../models/analysis-project';
 import { AddResilienceCalcData } from '../models/portfolio-calculator';
 
 interface ActiveProjectState {
@@ -76,6 +76,21 @@ export const ActiveProjectStore = signalStore(
                 }
                 return results;
             },
+            updateThreat: async (params: ProjectThreatUpdateParams) => {
+                console.log('update threat...');
+                console.log(params);
+                const results = await dbService.updateProjectThreat(params);
+                console.log('done');
+                console.log(results);
+                if (results.success) {
+                    const current = store.data();
+                    if (current?.id) {
+                        const data = await getData(current.id);
+                        patchState(store, { data });
+                    }
+                }
+                return results;
+            },
             removeThreat: async (id: string) => {
                 const current = store.data();
                 const results = await dbService.deleteProjectThreat(id);
@@ -100,12 +115,19 @@ export const ActiveProjectStore = signalStore(
                 }
                 return results;
 
-            }
-            // removeProject: async (id: string) => {
-            //     await dbService.deleteProject(id);
-            //     const results = await dbService.getProjects();
-            //     patchState(store, { data: results.data });
-            // }
+            },
+            removeThreatStrategy: async (id: number) => {
+                const current = store.data();
+                const results = await dbService.deleteThreatStrategy(id);
+                if (results.success && current?.id) {
+                    const results = await getData(current.id);
+                    const data = results
+                        ? deepCopy(results)
+                        : undefined;
+                    patchState(store, { data });
+                }
+                return results;
+            },
         };
     })
 );

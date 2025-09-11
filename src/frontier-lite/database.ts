@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
 import { AddResilienceCalcData, ResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
 import { ResilienceStrategyType } from './src/app/analysis/models/resilience-strategy';
 
@@ -171,6 +171,19 @@ export class DatabaseService {
         });
     }
 
+    public updateProjectThreat(params: ProjectThreatUpdateParams): Database.RunResult {
+        const stmt = this.db.prepare(queries['update-project-threat']);
+        console.log('update project threat params...');
+        console.log(params);
+        return stmt.run({
+            id: params.id,
+            name: params.name,
+            description: params.description,
+            threatType: params.threatType
+        });
+    }
+
+
     public addThreatStrategies(params: AddResilienceCalcData[]): Database.RunResult[] {
         interface Params {
             threatId: string;
@@ -189,6 +202,20 @@ export class DatabaseService {
             return stmt.run(queryParam);
         })
         return results;
+    }
+
+    public updateThreatStrategy(params: ProjectThreatStrategy): Database.RunResult {
+        const queryParams = {
+            id: params.id,
+            data: JSON.stringify(params.data)
+        }
+        const stmt = this.db.prepare(queries['update-threat-equipment']);
+        return stmt.run(queryParams);
+    }
+
+    public deleteThreatStrategy(id: number): Database.RunResult {
+        const stmt = this.db.prepare(queries['delete-threat-strategy']);
+        return stmt.run({ id });
     }
 
     public deleteProjectThreat(id: string): Database.RunResult {

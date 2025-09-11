@@ -81,3 +81,22 @@ export interface ProjectThreat {
 export interface AnalysisProjectData extends AnalysisProject {
     threats: ProjectThreat[];
 }
+
+export interface ProjectThreatUpdateParams {
+    id: string;
+    name: string;
+    description: string | null | undefined;
+    threatType: ThreatType;
+}
+
+export function isProjectThreatUpdateParams(value: any): value is ProjectThreatUpdateParams {
+    return (
+        value &&
+        value.id &&
+        typeof value.id === 'string' &&
+        value.name &&
+        typeof value.name === 'string' &&
+        value.threatType &&
+        isThreatType(value.threatType)
+    );
+}
