@@ -81,6 +81,11 @@ export class ProjectThreatViewComponent {
         return this._threatName;
     }
 
+    private _threat: ProjectThreat | null | undefined;
+    get threatId(): string | null | undefined {
+        return this._threat?.id;
+    }
+
     public data: EquipmentStrategy[] = [];
     public columns: TableColumn[] = [
         { id: 'action', name: '', getValue: (row: TableRow) => null },
@@ -141,10 +146,10 @@ export class ProjectThreatViewComponent {
 
         // Get fresh data from store to avoid stale input data
         const currentProject = this.projectStore.data();
-        const currentThreat = currentProject?.threats?.find(t => t.id === this.projectThreat?.id);
-        const strategies = currentThreat?.strategies || [];
-        this._threatName = currentThreat?.threatType
-            ? getThreatName(currentThreat.threatType)
+        this._threat = currentProject?.threats?.find(t => t.id === this.projectThreat?.id);
+        const strategies = this._threat?.strategies || [];
+        this._threatName = this._threat?.threatType
+            ? getThreatName(this._threat.threatType)
             : undefined;
 
         try {

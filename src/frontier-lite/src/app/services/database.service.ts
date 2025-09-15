@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from '../models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from '../analysis/models/analysis-project';
-import { AddResilienceCalcData } from '../analysis/models/portfolio-calculator';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from '../analysis/models/analysis-project';
 
 // declare global {
 //   interface Window {
@@ -74,7 +73,7 @@ export class DatabaseService {
         return window.electronAPI.updateProjectThreat(params);
     }
 
-    async addThreatStrategies(params: AddResilienceCalcData[]): Promise<AddRecordResult> {
+    async addThreatStrategies(params: AddProjectThreatStrategyParams[]): Promise<AddRecordResult> {
         return window.electronAPI.addThreatStrategies(params);
     }
 

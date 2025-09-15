@@ -1,5 +1,17 @@
+
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['../../..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back
+    </button>
+    Analysis Project
+</h1>
+
 <h3 class="text-center">
-    {{strategyName}}
+    Edit the data for the {{strategyName}} Resilience Strategy
 </h3>
 
 @if(form) {
@@ -109,7 +121,7 @@
 
         <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
             <span class="benefit-value">
-                ${{benefit | number:'1.0-0'}}
+                ${{outputFinal?.benefit | number:'1.0-0'}}
             </span>
         </div>
 
@@ -174,7 +186,7 @@
 
         <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
             <span class="benefit-value">
-                ${{cost | number:'1.0-0'}}
+                ${{outputFinal?.cost | number:'1.0-0'}}
             </span>
         </div>
 

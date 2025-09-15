@@ -3,8 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
-import { AddResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
 
 let mainWindow: BrowserWindow | null = null;
 let dbService: DatabaseService;
@@ -272,7 +271,7 @@ function createWindow(): void {
         }
     });
 
-    ipcMain.handle('db:add-threat-strategies', (event: IpcMainInvokeEvent, params: AddResilienceCalcData[]): AddRecordResult => {
+    ipcMain.handle('db:add-threat-strategies', (event: IpcMainInvokeEvent, params: AddProjectThreatStrategyParams[]): AddRecordResult => {
         try {
             console.log('add-threat-strategies');
             console.log(params);

@@ -1,9 +1,8 @@
 
 :host {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 20px);
     display: flex;
     flex-direction: column;
-    border: 1px red solid;
     padding-left: 7px;
     padding-right: 7px;
 }

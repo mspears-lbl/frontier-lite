@@ -1,16 +1,45 @@
-<h2 class="text-center">
-    Select Equipment Affected by Threat
-</h2>
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['../../..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Back
+    </button>
 
-<!-- <div class="app-info">
-    <mat-icon class="material-symbols-outlined">
-        info
-    </mat-icon>
+    Select Equipment Affected by {{threatName}}
+</h1>
+
+<!-- <div class="app-info" style="max-width: 700px; margin-left: auto; margin-right: auto;">
     <div class="info-content">
-        <h3>Equipment Management System</h3>
-        <p>Establish and maintain your equipment infrastructure by organizing equipment into logical groups, registering individual assets, and defining their operational locations.</p>
+        <p>
+            Add your equipment and apply resilience strategies for the <strong>{{threatName}}</strong> climate threat
+        </p>
     </div>
 </div> -->
+
+<div class="app-info">
+    <div class="info-content flex-row flex-align-row-items">
+        @if (hasSelectedEquipment) {
+        <mat-icon class="material-symbols-outlined fg-success">
+            check_circle
+        </mat-icon>
+        <span>Equipment Selected</span>
+        <button mat-button (click)="selectStrategies()" [disabled]="!hasSelectedEquipment">
+            Next: Select Resilience Strategies
+        </button>
+        }
+        @else {
+        <mat-icon class="material-symbols-outlined fg-error">
+            warning
+        </mat-icon>
+        <span>Select the equipment affected by the threat</span>
+        <button mat-button (click)="selectStrategies()" [disabled]="!hasSelectedEquipment">
+            Next: Select Resilience Strategies
+        </button>
+        }
+    </div>
+</div>
 <div>
     <button mat-button (click)="selectStrategies()" [disabled]="!hasSelectedEquipment">
         Select Resilience Strategies

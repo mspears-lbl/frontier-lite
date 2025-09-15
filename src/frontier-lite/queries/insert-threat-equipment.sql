@@ -20,12 +20,14 @@ INSERT INTO
         project_threat_id,
         equipment_id,
         strategy_type_id,
+        name,
         data
     )
 select
     wp.id,
     we.id,
     @strategyType,
+    @name,
     @data
 from
     w_project_threat as wp,

@@ -14,6 +14,9 @@ import { EquipmentMapComponent } from '../../../equipment/components/equipment-m
 import { EquipmentCollectionStore } from '../../../equipment/stores/equipment-collection.store';
 import { ActiveEquipmentCollectionStore } from '../../../equipment/stores/active-equipment-collection.store';
 import { AddEquipmentTableComponent } from '../add-equipment-table/add-equipment-table.component';
+import { ActiveProjectStore } from '../../stores/active-project.store';
+import { AnalysisProjectData } from '../../models/analysis-project';
+import { getThreatName } from '../../../models/threats';
 
 @Component({
     selector: 'app-add-threat-equipment',
@@ -36,12 +39,17 @@ import { AddEquipmentTableComponent } from '../add-equipment-table/add-equipment
 export class AddThreatEquipmentComponent {
     readonly store = inject(EquipmentCollectionStore);
     readonly activeStore = inject(ActiveEquipmentCollectionStore)
+    readonly activeProject = inject(ActiveProjectStore)
 
     public viewEquipment = new EventEmitter<string | null>();
     public equipmentCollections: EquipmentCollection[] | null | undefined;
     private activeCollection: EquipmentCollectionData | null | undefined;
     public form: FormGroup | undefined;
     private selectedEquipment: string | null | undefined;
+    private project: AnalysisProjectData | null | undefined;
+    private projectId: string | null | undefined;
+    private threatId: string | null | undefined;
+    public threatName: string | null | undefined;
 
     get hasEquipment(): boolean {
         return this.activeCollection && this.activeCollection.data.length > 0
@@ -70,9 +78,31 @@ export class AddThreatEquipmentComponent {
     }
 
     ngOnInit() {
+        this.setIdFromRoute();
         this.buildForm();
         this.setFormData();
     }
+
+    private setIdFromRoute(): void {
+        this.route.params.subscribe(params => {
+            console.log('current rout:', params);
+        });
+        this.route.parent?.params.subscribe(data => {
+            console.log('parent route data ❤️', data);
+            this.projectId = data['id'];
+            this.threatId = data['threatId'];
+            this.project = this.activeProject.data();
+            this.setThreatName();
+        });
+    }
+
+    private setThreatName(): void {
+        if (this.threatId && this.project) {
+            const threat = this.project.threats.find(item => item.id === this.threatId);
+            this.threatName = threat ? getThreatName(threat.threatType) : undefined;
+        }
+    }
+
 
     private buildForm(): void {
         this.form = this.fb.group({

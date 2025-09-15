@@ -8,6 +8,7 @@ with
                     'id', tes.id,
                     'equipmentId', e.uuid,
                     'strategyType', tes.strategy_type_id,
+                    'name', tes.name,
                     'data', tes.data
                 )
             ) as strategies

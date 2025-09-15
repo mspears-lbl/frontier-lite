@@ -3,8 +3,7 @@ import { patchState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
-import { AddProjectThreatRequest, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatUpdateParams } from '../models/analysis-project';
-import { AddResilienceCalcData } from '../models/portfolio-calculator';
+import { AddProjectThreatRequest, AddProjectThreatStrategyParams, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatUpdateParams } from '../models/analysis-project';
 
 interface ActiveProjectState {
     data: AnalysisProjectData | null | undefined;
@@ -103,7 +102,7 @@ export const ActiveProjectStore = signalStore(
                 }
                 return results;
             },
-            addThreatStrategies: async (params: AddResilienceCalcData[]) => {
+            addThreatStrategies: async (params: AddProjectThreatStrategyParams[]) => {
                 const current = store.data();
                 const results = await dbService.addThreatStrategies(params)
                 if (results.success && current?.id) {

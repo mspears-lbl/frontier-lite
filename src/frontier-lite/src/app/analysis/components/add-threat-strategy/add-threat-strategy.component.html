@@ -1,3 +1,33 @@
+<h1 style="position: relative;" class="text-center">
+    <button mat-button style="position: absolute; left: 0;"
+    [routerLink]="['../../../..']">
+        <mat-icon class="material-symbols-outlined">
+            chevron_left
+        </mat-icon>
+        Cancel
+    </button>
+
+    <!-- Apply Resilience Strategies to {{equipmentName}} affected by {{threatName}} -->
+    Apply Resilience Strategies
+</h1>
+
+<div>
+    <span class="app-label">
+        Equipment:
+    </span>
+    <span class="app-value">
+        {{equipmentName}}
+    </span>
+</div>
+<div>
+    <span class="app-label">
+        Threat:
+    </span>
+    <span class="app-value">
+        {{threatName}}
+    </span>
+</div>
+
 <div>
     <button mat-button (click)="backToEquipment()">
         <mat-icon class="material-symbols-outlined">
@@ -213,7 +243,7 @@
         </div>
 
     </div>
-    @for (item of strategyCalcs; track item.calcParams.inputData.strategyType) {
+    @for (item of strategyCalcs; track item.data.calcParams.inputData.strategyType) {
         <app-strategy-edit class="flex-item" [params]="item"
         (valueChange)="strategyChange($event)">
         </app-strategy-edit>

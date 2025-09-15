@@ -224,6 +224,7 @@ create table if not exists threat_equipment_strategy (
     project_threat_id INTEGER NOT NULL,
     equipment_id INTEGER NOT NULL,
     strategy_type_id INTEGER NOT NULL,
+    name text not null,
     data TEXT NOT NULL,
     FOREIGN KEY (project_threat_id) REFERENCES project_threat (id) ON DELETE CASCADE,
     FOREIGN KEY (strategy_type_id) REFERENCES strategy_type (id),

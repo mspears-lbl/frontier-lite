@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './analysis/models/analysis-project';
-import { AddResilienceCalcData } from './analysis/models/portfolio-calculator';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './analysis/models/analysis-project';
 
 export interface ElectronAPI {
     sendMessage: (message: any) => void;
@@ -33,7 +32,7 @@ export interface ElectronAPI {
     addProject: (params: AddAnalysisProjectParams) => Promise<AddRecordResult>;
     addProjectThreat: (params: AddProjectThreatRequest) => Promise<AddRecordResult>;
     updateProjectThreat: (params: ProjectThreatUpdateParams) => Promise<AddRecordResult>;
-    addThreatStrategies: (params: AddResilienceCalcData[]) => Promise<AddRecordResult>;
+    addThreatStrategies: (params: AddProjectThreatStrategyParams[]) => Promise<AddRecordResult>;
     updateThreatStrategy: (params: ProjectThreatStrategy) => Promise<AddRecordResult>;
     deleteThreatStrategy: (id: number) => Promise<{ success: boolean; result?: any; error?: string }>;
     deleteProjectThreat: (id: string) => Promise<{ success: boolean; result?: any; error?: string }>;

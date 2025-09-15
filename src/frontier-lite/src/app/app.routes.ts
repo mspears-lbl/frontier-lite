@@ -3,6 +3,7 @@ import { ProjectAnalysisHomeComponent } from './analysis/components/project-anal
 import { AddEquipmentStrategyComponent } from './analysis/components/add-equipment-strategy/add-equipment-strategy.component';
 import { AddThreatEquipmentComponent } from './analysis/components/add-threat-equipment/add-threat-equipment.component';
 import { AddThreatStrategyComponent } from './analysis/components/add-threat-strategy/add-threat-strategy.component';
+import { EditThreatStrategyComponent } from './analysis/components/edit-threat-strategy/edit-threat-strategy.component';
 
 export const routes: Routes = [
     {
@@ -42,6 +43,10 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () =>
             import('./analysis/components/project-analysis-home/project-analysis-home.component').then((m) => m.ProjectAnalysisHomeComponent),
+    },
+    {
+        path: 'analysis/:projectId/strategy/:threatId/:strategyId',
+        component: EditThreatStrategyComponent,
     },
     {
         path: 'analysis/:id/equipment-strategy/:threatId',

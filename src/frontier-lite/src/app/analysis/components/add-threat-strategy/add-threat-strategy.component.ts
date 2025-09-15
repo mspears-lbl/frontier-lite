@@ -9,18 +9,20 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Equipment, EquipmentCollectionData } from '../../../models/equipment';
 import { ActiveEquipmentCollectionStore } from '../../../equipment/stores/active-equipment-collection.store';
-import { getStrategiesForEquipment } from '../../models/resilience-strategy';
+import { getResilienceStrategyName, getStrategiesForEquipment } from '../../models/resilience-strategy';
 import { getResilienceStrategyConstants } from '../../models/calc-constants';
-import { StrategyEditComponent } from '../strategy-edit/strategy-edit.component';
+import { StrategyEditChange, StrategyEditComponent } from '../strategy-edit/strategy-edit.component';
 import { getThreatData } from '../../models/threat-data';
-import { AddResilienceCalcData, CalcParams, PortfolioCalculator, ResilienceCalcData } from '../../models/portfolio-calculator';
+import { CalcParams, isCalcParams, PortfolioCalculator } from '../../models/portfolio-calculator';
 import { deepCopy } from '../../../models/deep-copy';
 import { getCdfCoeff } from '../../models/cdf-coeff';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FrontierField, getFieldDescription } from '../../../utils/app-definitions';
 import { ActiveProjectStore } from '../../stores/active-project.store';
-import { AnalysisProjectData } from '../../models/analysis-project';
+import { AddProjectThreatStrategyParams, AnalysisProjectData, ThreatStrategyData } from '../../models/analysis-project';
 import { MessageService } from '../../../services/message.service';
+import { PortfolioCalculatorInitial } from '../../models/portfolio-calculator/calculator-initial';
+import { getThreatName } from '../../../models/threats';
 
 @Component({
     selector: 'app-add-threat-strategy',
@@ -45,13 +47,19 @@ export class AddThreatStrategyComponent {
     readonly activeProject = inject(ActiveProjectStore)
     private equipmentId: string | null | undefined;
     private equipmentCollection: EquipmentCollectionData | null | undefined;
-    public strategyCalcs: ResilienceCalcData[] = [];
+    private equipment: Equipment | null | undefined;
+    // public strategyCalcs: ThreatStrategyData[] = [];
+    public strategyCalcs: AddProjectThreatStrategyParams[] = [];
     private project: AnalysisProjectData | null | undefined;
     private projectId: string | null | undefined;
     private threatId: string | null | undefined;
+    public threatName: string | null | undefined;
 
     get fields(): typeof FrontierField {
         return FrontierField;
+    }
+    get equipmentName(): string | null | undefined {
+        return this.equipment?.name || null;
     }
 
     constructor(
@@ -59,13 +67,13 @@ export class AddThreatStrategyComponent {
         private route: ActivatedRoute,
         private messageService: MessageService
     ) {
-        effect(() => {
-            console.log('store data changed');
-            console.log(this.store.data());
-            this.equipmentCollection = this.store.data();
-            this.project = this.activeProject.data();
-            this.setStrategies();
-        });
+        // effect(() => {
+        //     console.log('store data changed');
+        //     console.log(this.store.data());
+        //     this.equipmentCollection = this.store.data();
+        //     this.project = this.activeProject.data();
+        //     this.setStrategies();
+        // });
     }
 
     ngOnInit() {
@@ -82,7 +90,25 @@ export class AddThreatStrategyComponent {
             console.log('route data ❤️', data);
             this.projectId = data['id'];
             this.threatId = data['threatId'];
+            this.equipmentCollection = this.store.data();
+            this.project = this.activeProject.data();
+            this.setThreatName();
+            this.setEquipment();
+            this.setStrategies();
         });
+    }
+
+    private setThreatName(): void {
+        if (this.threatId && this.project) {
+            const threat = this.project.threats.find(item => item.id === this.threatId);
+            this.threatName = threat ? getThreatName(threat.threatType) : undefined;
+        }
+    }
+
+    private setEquipment(): void {
+        this.equipment = this.equipmentId && this.equipmentCollection
+            ? this.equipmentCollection.data.find(item => item.id === this.equipmentId)
+            : undefined;
     }
 
     private setStrategies(): void {
@@ -97,19 +123,33 @@ export class AddThreatStrategyComponent {
             for (let strategyType of strategies || []) {
                 const constants = getResilienceStrategyConstants(strategyType)
                 console.log(constants);
-                const params: CalcParams = {
+                const calcParams: CalcParams = {
                     threatData: deepCopy(threatData),
                     inputData: constants,
                     cdfCoeff: getCdfCoeff()
                 }
-                const results = PortfolioCalculator.run(params);
-                // console.log('results!', results);
-                this.strategyCalcs.push({
-                    calcParams: params,
+                const results = isCalcParams(calcParams)
+                    ? PortfolioCalculator.run(calcParams)
+                    : undefined;
+                if (!results) {
+                    throw new Error('Unable to run strategy calculations!');
+                }
+                const data: ThreatStrategyData = {
+                    calcParams,
                     outputInitial: results.initial,
                     outputIntermediate: results.intermediate,
                     outputFinal: results.final
-                });
+                }
+                // const results = PortfolioCalculator.run(params);
+                // console.log('results!', results);
+                const strategyParams: AddProjectThreatStrategyParams = {
+                    threatId: this.threatId!,
+                    equipmentId: this.equipmentId!,
+                    strategyType: strategyType,
+                    name: getResilienceStrategyName(strategyType),
+                    data: deepCopy(data)
+                }
+                this.strategyCalcs.push(strategyParams);
             }
         }
         console.log('strategies', strategies);
@@ -122,7 +162,7 @@ export class AddThreatStrategyComponent {
         return;
     }
 
-    public strategyChange(value: CalcParams): void {
+    public strategyChange(value: StrategyEditChange): void {
         console.log(`strategy change:`, value);
     }
 
@@ -135,23 +175,13 @@ export class AddThreatStrategyComponent {
     }
 
     public addStrategies(): void {
-        if (!this.threatId || !this.equipmentId) {
-            this.messageService.display("Unable to add the strategies because of missing data.");
-            return;
-        }
-        const threatId = this.threatId;
-        const equipmentId = this.equipmentId;
-        const params: AddResilienceCalcData[] = this.strategyCalcs.map(data => ({
-            threatId,
-            equipmentId,
-            strategyType: data.calcParams.inputData.strategyType,
-            data: deepCopy(data)
-        }))
-        // const params: AddResilienceCalcData = {
-        //     threatId: this.threatId,
-        //     equipmentId: this.equipmentId,
-        //     strategies: this.strategyCalcs.map(item => ({...item, strategyType: item.calcParams.inputData.strategyType}))
-        // }
+        const params: AddProjectThreatStrategyParams[] = this.strategyCalcs.map(item => ({
+            name: item.name,
+            threatId: item.threatId,
+            equipmentId: item.equipmentId,
+            strategyType: item.strategyType,
+            data: deepCopy(item.data)
+        }));
         console.log('add Strategies...', this.strategyCalcs, this.project, this.route, this.projectId, this.threatId);
         console.log(params);
         this.activeProject.addThreatStrategies(params);

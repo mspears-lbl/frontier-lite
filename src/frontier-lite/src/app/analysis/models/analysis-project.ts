@@ -1,8 +1,8 @@
 import { isThreatType, ThreatType } from "../../models/threats";
-import { CalcParams } from "./portfolio-calculator";
-import { ResilienceCalcFinal } from "./portfolio-calculator/calculator-final";
-import { ResilienceCalcInitial } from "./portfolio-calculator/calculator-initial";
-import { ResilienceCalcIntermediate } from "./portfolio-calculator/calculator-intermediate";
+import { CalcParams, isCalcParams } from "./portfolio-calculator";
+import { isResilienceCalcFinal, ResilienceCalcFinal } from "./portfolio-calculator/calculator-final";
+import { isResilienceCalcInitial, ResilienceCalcInitial } from "./portfolio-calculator/calculator-initial";
+import { isResilienceCalcIntermediate, ResilienceCalcIntermediate } from "./portfolio-calculator/calculator-intermediate";
 import { ResilienceStrategyType } from "./resilience-strategy";
 
 export interface AnalysisProject {
@@ -62,11 +62,65 @@ export interface ThreatStrategyData {
 	outputFinal: ResilienceCalcFinal;
 }
 
+export function isThreatStrategyData(value: any): value is ThreatStrategyData {
+    return (
+        value &&
+        value.calcParams &&
+        isCalcParams(value.calcParams) &&
+        value.outputInitial &&
+        isResilienceCalcInitial(value.outputInitial) &&
+        value.outputIntermediate &&
+        isResilienceCalcIntermediate(value.outputIntermediate) &&
+        value.outputFinal &&
+        isResilienceCalcFinal(value.outputFinal)
+    );
+}
+
+export interface ThreatStrategyDataEdit {
+    calcParams: CalcParams;
+	outputInitial: ResilienceCalcInitial | null | undefined;
+	outputIntermediate: ResilienceCalcIntermediate | null | undefined;
+	outputFinal: ResilienceCalcFinal | null | undefined;
+}
+
 export interface ProjectThreatStrategy {
     id: number;
+    name: string;
     equipmentId: string;
     strategyType: ResilienceStrategyType;
     data: ThreatStrategyData;
+}
+
+export interface EditProjectThreatStrategyParams {
+    threatId: string;
+    name: string | null | undefined;
+    equipmentId: string;
+    strategyType: ResilienceStrategyType;
+    data: ThreatStrategyDataEdit;
+}
+
+export interface AddProjectThreatStrategyParams {
+    threatId: string;
+    name: string;
+    equipmentId: string;
+    strategyType: ResilienceStrategyType;
+    data: ThreatStrategyData;
+}
+
+export function isAddProjectThreatStrategyParams(value: any): value is AddProjectThreatStrategyParams {
+    return (
+        value &&
+        value.threatId &&
+        typeof value.threatId === 'string' &&
+        value.name &&
+        typeof value.name === 'string' &&
+        value.equipmentId &&
+        typeof value.equipmentId === 'string' &&
+        value.strategyType &&
+        isThreatType(value.strategyType) &&
+        value.data &&
+        typeof value.data === 'object'
+    );
 }
 
 export interface ProjectThreat {

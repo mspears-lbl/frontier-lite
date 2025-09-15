@@ -5,8 +5,7 @@ import * as fs from 'fs';
 import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
-import { AddResilienceCalcData, ResilienceCalcData } from './src/app/analysis/models/portfolio-calculator';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
 import { ResilienceStrategyType } from './src/app/analysis/models/resilience-strategy';
 
 export class DatabaseService {
@@ -184,14 +183,16 @@ export class DatabaseService {
     }
 
 
-    public addThreatStrategies(params: AddResilienceCalcData[]): Database.RunResult[] {
+    public addThreatStrategies(params: AddProjectThreatStrategyParams[]): Database.RunResult[] {
         interface Params {
+            name: string;
             threatId: string;
             equipmentId: string;
             strategyType: ResilienceStrategyType;
             data: string;
         }
         const queryParams: Params[] = params.map(item => ({
+            name: item.name,
             threatId: item.threatId,
             equipmentId: item.equipmentId,
             strategyType: item.strategyType,

@@ -67,16 +67,16 @@ export class PortfolioCalculator {
 	}
 }
 
-export interface ResilienceCalcData {
-    calcParams: CalcParams;
-    outputInitial: ResilienceCalcInitial | null | undefined;
-    outputIntermediate: ResilienceCalcIntermediate | null | undefined;
-    outputFinal: ResilienceCalcFinal | null | undefined;
-}
+// export interface ResilienceCalcData {
+//     calcParams: CalcParams;
+//     outputInitial: ResilienceCalcInitial | null | undefined;
+//     outputIntermediate: ResilienceCalcIntermediate | null | undefined;
+//     outputFinal: ResilienceCalcFinal | null | undefined;
+// }
 
-export interface AddResilienceCalcData {
-    threatId: string;
-    equipmentId: string;
-    strategyType: ResilienceStrategyType;
-    data: ResilienceCalcData;
-}
+// export interface AddResilienceCalcData {
+//     threatId: string;
+//     equipmentId: string;
+//     strategyType: ResilienceStrategyType;
+//     data: ResilienceCalcData;
+// }
