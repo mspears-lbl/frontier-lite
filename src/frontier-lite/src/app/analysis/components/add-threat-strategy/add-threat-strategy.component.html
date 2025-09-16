@@ -7,25 +7,28 @@
         Cancel
     </button>
 
-    <!-- Apply Resilience Strategies to {{equipmentName}} affected by {{threatName}} -->
     Apply Resilience Strategies
 </h1>
 
-<div>
-    <span class="app-label">
-        Equipment:
-    </span>
-    <span class="app-value">
-        {{equipmentName}}
-    </span>
-</div>
-<div>
-    <span class="app-label">
-        Threat:
-    </span>
-    <span class="app-value">
-        {{threatName}}
-    </span>
+<div class="app-info app-mlr-1">
+    <div class="info-content">
+        <div class="app-mb-1">
+            <span class="text-bold info-label">
+                Equipment:
+            </span>
+            <span>
+                {{equipmentName}}
+            </span>
+        </div>
+        <div>
+            <span class="text-bold info-label">
+                Threat:
+            </span>
+            <span>
+                {{threatName}}
+            </span>
+        </div>
+    </div>
 </div>
 
 <div>
@@ -44,15 +47,15 @@
 </div>
 
 <div class="flex-row">
-    <div class="flex-item" style="padding-top: 60px;">
+    <div class="flex-item" class="calc-label-cell" style="padding-top: 60px;">
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Strategy Name
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Customers Affected
                 <mat-icon [matTooltip]="getFieldDescription(fields.CustomersAffected)"
@@ -62,7 +65,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Outage Duration (Hours)
                 <mat-icon [matTooltip]="getFieldDescription(fields.OutageDuration)"
@@ -72,7 +75,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Threat Frequency
                 <mat-icon [matTooltip]="getFieldDescription(fields.ThreatFrequency)"
@@ -82,7 +85,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Assumed Lifespan (years)
                 <mat-icon [matTooltip]="getFieldDescription(fields.AssumedLifespanYears)"
@@ -92,7 +95,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Discount Rate
                 <mat-icon [matTooltip]="getFieldDescription(fields.DiscountRate)"
@@ -102,7 +105,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Benefits
                 <mat-icon [matTooltip]="getFieldDescription(fields.BenefitsNpv)"
@@ -112,7 +115,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Avoided Utility Cost
                 <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedUtilityCostsYear)"
@@ -122,7 +125,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Annual Avoided Customer Cost
                 <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedCustomerCostsYear)"
@@ -132,7 +135,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Avoided Other Cost
                 <mat-icon [matTooltip]="getFieldDescription(fields.AnnualAvoidedOtherCostsYear)"
@@ -142,7 +145,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Costs
                 <mat-icon [matTooltip]="getFieldDescription(fields.CostsNpv)"
@@ -152,7 +155,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Cap Ex
                 <mat-icon [matTooltip]="getFieldDescription(fields.CapitalInvestment)"
@@ -162,7 +165,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 OM Cost
                 <mat-icon [matTooltip]="getFieldDescription(fields.AnnualOMCostsYear)"
@@ -172,7 +175,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Annual Fixed Cost
                 <mat-icon [matTooltip]="getFieldDescription(fields.AnnualFixedCostsYear)"
@@ -182,7 +185,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Annual Other Costs
                 <mat-icon [matTooltip]="getFieldDescription(fields.AnnualOtherCostsYear)"
@@ -192,7 +195,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Benefit-Cost Ratio
                 <mat-icon [matTooltip]="getFieldDescription(fields.BenefitCostRatio)"
@@ -202,7 +205,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Supply Chain Interdependency Index
                 <mat-icon [matTooltip]="getFieldDescription(fields.SupplyChainInterdependencyIndex)"
@@ -212,7 +215,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Community Support Index
                 <mat-icon [matTooltip]="getFieldDescription(fields.CommunitySupportIndex)"
@@ -222,7 +225,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Energy Independence Index
                 <mat-icon [matTooltip]="getFieldDescription(fields.EnergyIndependenceIndex)"
@@ -232,7 +235,7 @@
             </span>
         </div>
 
-        <div class="strategy-edit-row flex-row flex-center-row-items flex-align-row-items">
+        <div class="strategy-edit-row-border flex-row flex-center-row-items flex-align-row-items">
             <span class="row-label flex-row flex-align-row-items flex-gap">
                 Sustainability Index
                 <mat-icon [matTooltip]="getFieldDescription(fields.SustainabilityIndex)"
@@ -245,7 +248,8 @@
     </div>
     @for (item of strategyCalcs; track item.data.calcParams.inputData.strategyType) {
         <app-strategy-edit class="flex-item" [params]="item"
-        (valueChange)="strategyChange($event)">
+        (valueChange)="strategyChange($event)"
+        (removeStrategyEvent)="removeStrategyHandler(item)">
         </app-strategy-edit>
     }
 </div>

@@ -3,7 +3,7 @@ import { CalcParams, isCalcParams } from "./portfolio-calculator";
 import { isResilienceCalcFinal, ResilienceCalcFinal } from "./portfolio-calculator/calculator-final";
 import { isResilienceCalcInitial, ResilienceCalcInitial } from "./portfolio-calculator/calculator-initial";
 import { isResilienceCalcIntermediate, ResilienceCalcIntermediate } from "./portfolio-calculator/calculator-intermediate";
-import { ResilienceStrategyType } from "./resilience-strategy";
+import { isResilienceStrategyType, ResilienceStrategyType } from "./resilience-strategy";
 
 export interface AnalysisProject {
     id: string;
@@ -117,7 +117,7 @@ export function isAddProjectThreatStrategyParams(value: any): value is AddProjec
         value.equipmentId &&
         typeof value.equipmentId === 'string' &&
         value.strategyType &&
-        isThreatType(value.strategyType) &&
+        isResilienceStrategyType(value.strategyType) &&
         value.data &&
         typeof value.data === 'object'
     );

@@ -92,6 +92,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     padding-right: 4px;
 }
 
+.app-pt-1 {
+    padding-top: 5px !important;
+}
+
 .app-card {
     .mat-mdc-card-header-text {
         flex: 1 !important;
@@ -140,6 +144,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .text-italic {
     font-style: italic;
 }
+.text-bold {
+    font-weight: bold;
+}
 
 
 .app-info {
@@ -180,5 +187,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     min-height: 70px !important;
     max-height: 70px !important;
     overflow-y: visible;
-    border: 1px gray solid;
+    border: 1px white solid;
+    // padding-top: 7px;
+}
+
+.strategy-edit-row-border {
+    min-height: 70px !important;
+    max-height: 70px !important;
+    overflow-y: visible;
+    border: 1px lightgray solid;
 }

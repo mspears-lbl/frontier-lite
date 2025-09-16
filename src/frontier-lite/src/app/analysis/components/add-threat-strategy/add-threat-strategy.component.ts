@@ -19,10 +19,11 @@ import { getCdfCoeff } from '../../models/cdf-coeff';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FrontierField, getFieldDescription } from '../../../utils/app-definitions';
 import { ActiveProjectStore } from '../../stores/active-project.store';
-import { AddProjectThreatStrategyParams, AnalysisProjectData, ThreatStrategyData } from '../../models/analysis-project';
+import { AddProjectThreatStrategyParams, AnalysisProjectData, isAddProjectThreatStrategyParams, ThreatStrategyData } from '../../models/analysis-project';
 import { MessageService } from '../../../services/message.service';
 import { PortfolioCalculatorInitial } from '../../models/portfolio-calculator/calculator-initial';
 import { getThreatName } from '../../../models/threats';
+import { getEquipmentTypeName } from '../../../models/equipment-type';
 
 @Component({
     selector: 'app-add-threat-strategy',
@@ -48,6 +49,7 @@ export class AddThreatStrategyComponent {
     private equipmentId: string | null | undefined;
     private equipmentCollection: EquipmentCollectionData | null | undefined;
     private equipment: Equipment | null | undefined;
+    private _equipmentName: string | null | undefined;
     // public strategyCalcs: ThreatStrategyData[] = [];
     public strategyCalcs: AddProjectThreatStrategyParams[] = [];
     private project: AnalysisProjectData | null | undefined;
@@ -59,7 +61,7 @@ export class AddThreatStrategyComponent {
         return FrontierField;
     }
     get equipmentName(): string | null | undefined {
-        return this.equipment?.name || null;
+        return this._equipmentName;
     }
 
     constructor(
@@ -108,6 +110,9 @@ export class AddThreatStrategyComponent {
     private setEquipment(): void {
         this.equipment = this.equipmentId && this.equipmentCollection
             ? this.equipmentCollection.data.find(item => item.id === this.equipmentId)
+            : undefined;
+        this._equipmentName = this.equipment
+            ? `${getEquipmentTypeName(this.equipment.equipmentType)}: ${this.equipment.name}`
             : undefined;
     }
 
@@ -174,8 +179,10 @@ export class AddThreatStrategyComponent {
         );
     }
 
-    public addStrategies(): void {
-        const params: AddProjectThreatStrategyParams[] = this.strategyCalcs.map(item => ({
+    public async addStrategies(): Promise<void> {
+        const params: AddProjectThreatStrategyParams[] = this.strategyCalcs
+        .filter(item => isAddProjectThreatStrategyParams(item))
+        .map(item => ({
             name: item.name,
             threatId: item.threatId,
             equipmentId: item.equipmentId,
@@ -184,10 +191,31 @@ export class AddThreatStrategyComponent {
         }));
         console.log('add Strategies...', this.strategyCalcs, this.project, this.route, this.projectId, this.threatId);
         console.log(params);
-        this.activeProject.addThreatStrategies(params);
+        await this.activeProject.addThreatStrategies(params);
+        this.strategyCalcs = this.strategyCalcs
+            .filter(item => params.find(i => i.strategyType === item.strategyType) == null);
+        if (this.strategyCalcs.length === 0) {
+            this.messageService.display("Successfully added the resilience strategies!", {duration: 3000});
+            this.router.navigate(
+                ['../../../..'],
+                {relativeTo: this.route}
+            );
+        }
+        else {
+            console.log(`remaining strartegy: ${isAddProjectThreatStrategyParams(this.strategyCalcs[0])}`);
+            console.log(this.strategyCalcs);
+        }
     }
 
     public getFieldDescription(field: FrontierField): string {
         return getFieldDescription(field);
+    }
+
+    public removeStrategyHandler(params: AddProjectThreatStrategyParams): void {
+        console.log('remove strategy', params);
+        const index = this.strategyCalcs.findIndex(item => item.threatId === params.threatId);
+        if (index >= 0) {
+            this.strategyCalcs.splice(index, 1);
+        }
     }
 }

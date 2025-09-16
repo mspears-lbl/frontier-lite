@@ -3,3 +3,21 @@
     font-weight: bold;
     // font-size: 1.05rem;
 }
+
+
+.calc-label-cell {
+    max-width: 310px !important;
+    min-width: 310px !important;
+}
+
+.info-container {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info-label {
+    display: inline-block;
+    min-width: 90px !important;
+    max-width: 90px !important;
+}

@@ -1,6 +1,8 @@
 :host {
-    border: 1px dodgerblue solid;
-    max-width: 300px;
+    // border: 1px dodgerblue solid;
+    min-width: 330px !important;
+    max-width: 330px !important;
+    border-right: 1px lightgray solid;
 }
 
 .benefit-value {

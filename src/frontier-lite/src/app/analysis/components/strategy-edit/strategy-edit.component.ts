@@ -67,6 +67,8 @@ export class StrategyEditComponent {
 
     @Output()
     public valueChange = new EventEmitter<StrategyEditChange>();
+    @Output()
+    public removeStrategyEvent = new EventEmitter<void>();
 
     public strategyName: string | null | undefined;
     public form: FormGroup | undefined;
@@ -365,4 +367,7 @@ export class StrategyEditComponent {
             : undefined;
     }
 
+    public removeStrategy(): void {
+        this.removeStrategyEvent.emit();
+    }
 }
