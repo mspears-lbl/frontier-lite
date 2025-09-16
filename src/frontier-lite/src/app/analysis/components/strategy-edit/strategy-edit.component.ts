@@ -158,8 +158,8 @@ export class StrategyEditComponent {
             this.form.get('name')?.valueChanges.subscribe(value => {
                 if (this.form?.get('name')?.valid) {
                     this.paramsLocal!.name = this.form?.get('name')?.value;
+                    this.emitValueChange();
                 }
-                this.emitValueChange();
             });
             this.subscribeToValueChanges(
                 this.form.get('customers'),

@@ -90,7 +90,8 @@ export class ProjectThreatViewComponent {
     public columns: TableColumn[] = [
         { id: 'action', name: '', getValue: (row: TableRow) => null },
         { id: 'equipmentName', name: 'Equipment', getValue: (row: TableRow) => row.equipmentName },
-        { id: 'strategyTypeName', name: 'Strategy', getValue: (row: TableRow) => row.strategyTypeName},
+        { id: 'strategyTypeName', name: 'Strategy Type', getValue: (row: TableRow) => row.strategyTypeName},
+        { id: 'strategyName', name: 'Name', getValue: (row: TableRow) => row.strategyName},
         { id: 'benefit', name: 'Benefit', getValue: (row: TableRow) => row.benefit, numberFormat: '1.0-0'},
         { id: 'cost', name: 'Cost', getValue: (row: TableRow) => row.cost, numberFormat: '1.0-0'},
         { id: 'benefitCost', name: 'Benefit/Cost', getValue: (row: TableRow) => row.benefitCost, numberFormat: '1.2-2'},
@@ -161,7 +162,7 @@ export class ProjectThreatViewComponent {
                 const row: TableRow = {
                     id: item.id,
                     equipmentName: equipment?.name || 'Unknown',
-                    strategyName: 'strategy Name',
+                    strategyName: item.name,
                     strategyTypeName: getResilienceStrategyName(item.strategyType),
                     benefit: item.data.outputFinal.benefit,
                     cost: item.data.outputFinal.cost,

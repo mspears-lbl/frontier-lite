@@ -169,6 +169,13 @@ export class AddThreatStrategyComponent {
 
     public strategyChange(value: StrategyEditChange): void {
         console.log(`strategy change:`, value);
+        if (value.valid && value.data) {
+            const index = this.strategyCalcs.findIndex(item => item.strategyType === value.strategyType);
+            if (index >= 0) {
+                this.strategyCalcs[index] = value.data;
+            }
+        }
+        console.log(this.strategyCalcs);
     }
 
     public backToEquipment(): void {
