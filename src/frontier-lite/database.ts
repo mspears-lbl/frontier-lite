@@ -208,6 +208,7 @@ export class DatabaseService {
     public updateThreatStrategy(params: ProjectThreatStrategy): Database.RunResult {
         const queryParams = {
             id: params.id,
+            name: params.name,
             data: JSON.stringify(params.data)
         }
         const stmt = this.db.prepare(queries['update-threat-equipment']);
