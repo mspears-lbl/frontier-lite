@@ -12,6 +12,7 @@ import { getThreatIcon, getThreatName, ThreatType } from '../../../models/threat
 import { NewProjectThreatService } from '../new-project-threat/new-project-threat.service';
 import { CommonModule } from '@angular/common';
 import { ProjectThreatViewComponent } from '../project-threat-view/project-threat-view.component';
+import { ProjectStatsViewComponent } from '../project-stats-view/project-stats-view.component';
 
 @Component({
   selector: 'app-project-analysis-home',
@@ -21,7 +22,8 @@ import { ProjectThreatViewComponent } from '../project-threat-view/project-threa
     MatButtonModule,
     MatIconModule,
     MatExpansionModule,
-    ProjectThreatViewComponent
+    ProjectThreatViewComponent,
+    ProjectStatsViewComponent
   ],
   templateUrl: './project-analysis-home.component.html',
   styleUrl: './project-analysis-home.component.scss'

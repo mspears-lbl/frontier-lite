@@ -1,0 +1,15 @@
+<div class="flex-row">
+    <div class="flex-item">
+        <div class="text-center app-mb-1 calc-label">Portfolio Benefit ($) (PV)</div>
+        <div class="text-center calc-value">${{benefit | number:'0.2-2'}}M</div>
+    </div>
+    <div class="flex-item">
+        <div class="text-center app-mb-1 calc-label">Portfolio Cost ($) (PV)</div>
+        <div class="text-center calc-value">${{cost | number:'0.2-2'}}M</div>
+    </div>
+    <div class="flex-item">
+        <div class="text-center app-mb-1 calc-label">Portfolio Benefit/Cost Ratio</div>
+        <div class="text-center calc-value">{{benefitCost | number:'0.2-2'}}</div>
+    </div>
+</div>
+<app-net-benfit-plot></app-net-benfit-plot>

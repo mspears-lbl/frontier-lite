@@ -3,14 +3,17 @@ import { patchState } from '@ngrx/signals';
 import { inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { deepCopy } from '../../models/deep-copy';
-import { AddProjectThreatRequest, AddProjectThreatStrategyParams, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatUpdateParams } from '../models/analysis-project';
+import { AddProjectThreatRequest, AddProjectThreatStrategyParams, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from '../models/analysis-project';
+import { ProjectCalcResults, ProjectCalculator } from '../models/project-calculator';
 
 interface ActiveProjectState {
     data: AnalysisProjectData | null | undefined;
+    calcs: ProjectCalcResults | null | undefined;
 }
 
 const initialState: ActiveProjectState = {
-    data: undefined
+    data: undefined,
+    calcs: undefined
 };
 
 export const ActiveProjectStore = signalStore(
@@ -48,7 +51,10 @@ export const ActiveProjectStore = signalStore(
                 const data = results
                     ? deepCopy(results)
                     : undefined;
-                patchState(store, { data });
+                const calcs = data
+                    ? ProjectCalculator.run(data.threats)
+                    : undefined;
+                patchState(store, { data, calcs });
                 return data;
             },
             reloadData: async () => {
@@ -60,7 +66,10 @@ export const ActiveProjectStore = signalStore(
                     const data = results
                         ? deepCopy(results)
                         : undefined;
-                    patchState(store, { data });
+                    const calcs = data
+                        ? ProjectCalculator.run(data.threats)
+                        : undefined;
+                    patchState(store, { data, calcs });
                 }
             },
             addThreat: async (params: AddProjectThreatRequest) => {
@@ -71,7 +80,10 @@ export const ActiveProjectStore = signalStore(
                 console.log(results);
                 if (results.success) {
                     const data = await getData(params.projectId);
-                    patchState(store, { data });
+                    const calcs = data
+                        ? ProjectCalculator.run(data.threats)
+                        : undefined;
+                    patchState(store, { data, calcs });
                 }
                 return results;
             },
@@ -85,7 +97,10 @@ export const ActiveProjectStore = signalStore(
                     const current = store.data();
                     if (current?.id) {
                         const data = await getData(current.id);
-                        patchState(store, { data });
+                        const calcs = data
+                            ? ProjectCalculator.run(data.threats)
+                            : undefined;
+                        patchState(store, { data, calcs });
                     }
                 }
                 return results;
@@ -98,7 +113,10 @@ export const ActiveProjectStore = signalStore(
                     const data = results
                         ? deepCopy(results)
                         : undefined;
-                    patchState(store, { data });
+                    const calcs = data
+                        ? ProjectCalculator.run(data.threats)
+                        : undefined;
+                    patchState(store, { data, calcs });
                 }
                 return results;
             },
@@ -110,7 +128,10 @@ export const ActiveProjectStore = signalStore(
                     const data = results
                         ? deepCopy(results)
                         : undefined;
-                    patchState(store, { data });
+                    const calcs = data
+                        ? ProjectCalculator.run(data.threats)
+                        : undefined;
+                    patchState(store, { data, calcs });
                 }
                 return results;
 
@@ -123,9 +144,28 @@ export const ActiveProjectStore = signalStore(
                     const data = results
                         ? deepCopy(results)
                         : undefined;
-                    patchState(store, { data });
+                    const calcs = data
+                        ? ProjectCalculator.run(data.threats)
+                        : undefined;
+                    patchState(store, { data, calcs });
                 }
                 return results;
+            },
+            updateThreatStrategy: async (params: ProjectThreatStrategy) => {
+                const current = store.data();
+                const results = await dbService.updateThreatStrategy(params)
+                if (results.success && current?.id) {
+                    const results = await getData(current.id);
+                    const data = results
+                        ? deepCopy(results)
+                        : undefined;
+                    const calcs = data
+                        ? ProjectCalculator.run(data.threats)
+                        : undefined;
+                    patchState(store, { data, calcs });
+                }
+                return results;
+
             },
         };
     })
