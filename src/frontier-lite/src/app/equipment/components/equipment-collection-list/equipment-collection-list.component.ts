@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -9,11 +9,14 @@ import { DatabaseService } from '../../../services/database.service';
 import { EquipmentCollection } from '../../../models/equipment';
 import { ConfirmDialogService } from '../../../components/confirm-dialog/confirm-dialog.service';
 import { MessageService } from '../../../services/message.service';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { ActiveEquipmentCollectionStore } from '../../stores/active-equipment-collection.store';
 
 interface TableRow {
     id: string;
     name: string;
+    ref: EquipmentCollection;
     created: Date;
 }
 
@@ -32,12 +35,14 @@ interface TableColumn {
         MatTableModule,
         MatButtonModule,
         MatIconModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule
     ],
     templateUrl: './equipment-collection-list.component.html',
     styleUrl: './equipment-collection-list.component.scss'
 })
 export class EquipmentCollectionListComponent {
+    readonly activeStore = inject(ActiveEquipmentCollectionStore)
 
     public columns: TableColumn[] = [
         { id: 'action', name: '', getValue: (row: TableRow) => null },
@@ -55,7 +60,9 @@ export class EquipmentCollectionListComponent {
         private createCollectionService: NewEquipmentCollectionService,
         private dbService: DatabaseService,
         private confirmService: ConfirmDialogService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
     }
 
@@ -82,8 +89,10 @@ export class EquipmentCollectionListComponent {
         });
     }
 
-    public loadCollection(id: string): void {
-        console.log(`load collection: ${id}`);
+    public loadCollection(item: EquipmentCollection): void {
+        console.log(`load collection: ${item.name}`);
+        this.activeStore.setData(item);
+        this.router.navigate(['..'], {relativeTo: this.route});
     }
 
     private setTableData(data: EquipmentCollection[]): void {
@@ -96,7 +105,8 @@ export class EquipmentCollectionListComponent {
                 const row: TableRow = {
                     id: item.id,
                     name: item.name,
-                    created: item.created
+                    created: item.created,
+                    ref: item
                 };
                 rows.push(row);
             }
