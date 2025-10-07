@@ -19,6 +19,7 @@ import { Subject } from 'rxjs';
 import { getThreatName } from '../../../models/threats';
 import { EditProjectThreatInfoService } from '../edit-project-threat-info/edit-project-threat.service';
 import { DialogParams } from '../edit-project-threat-info/edit-project-threat-info.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 interface EquipmentStrategy {
     equipmentId: string;
@@ -53,7 +54,8 @@ interface TableColumn {
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatMenuModule
   ],
   templateUrl: './project-threat-view.component.html',
   styleUrl: './project-threat-view.component.scss'
