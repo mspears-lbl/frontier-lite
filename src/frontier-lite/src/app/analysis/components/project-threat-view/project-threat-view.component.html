@@ -8,23 +8,23 @@
 <!-- <h3 class="text-center"></h3> -->
 
 <div>
-    <button mat-button (click)="editThreatInfo()">
+    <button mat-flat-button class="bg-secondary" (click)="editThreatInfo()">
         <mat-icon class="material-symbols-outlined">
             edit
         </mat-icon>
         Edit Threat Information
     </button>
-    <button mat-button (click)="deleteThreat()">
-        <mat-icon class="material-symbols-outlined">
-            delete
-        </mat-icon>
-        Remove Threat from Project
-    </button>
-    <button mat-button (click)="addEquipmentStrategy()">
+    <button mat-flat-button class="bg-secondary" (click)="addEquipmentStrategy()">
         <mat-icon class="material-symbols-outlined">
             add
         </mat-icon>
         Add Equipment/Resilience Strategies
+    </button>
+    <button mat-flat-button class="bg-error-light" (click)="deleteThreat()">
+        <mat-icon class="material-symbols-outlined">
+            delete
+        </mat-icon>
+        Remove Threat from Project
     </button>
 </div>
 
