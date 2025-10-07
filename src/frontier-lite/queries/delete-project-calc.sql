@@ -1,0 +1,1 @@
+DELETE FROM project_calc WHERE project_id = (SELECT id FROM project WHERE uuid = @projectId)

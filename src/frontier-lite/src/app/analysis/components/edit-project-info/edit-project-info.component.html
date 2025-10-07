@@ -1,0 +1,37 @@
+<h2 class="text-center">
+    Edit Analysis Project
+</h2>
+
+<div class="content-container space-left-right">
+    @if(form) {
+    <form [formGroup]="form" class="flex-column space-around">
+        <mat-form-field class="flex-item bottom-space" subscriptSizing="dynamic">
+            <mat-label>Name</mat-label>
+            <input matInput
+                type="text"
+                formControlName="name"
+                >
+        </mat-form-field>
+
+        <mat-form-field class="flex-item bottom-space" subscriptSizing="dynamic">
+            <mat-label>Description</mat-label>
+            <textarea matInput
+            rows="3"
+            formControlName="description">
+            </textarea>
+        </mat-form-field>
+    </form>
+    }
+
+    <div class="flex-row space-above flex-center-row-items flex-center-gap">
+        <button mat-button (click)="save()" [disabled]="form?.valid ? false : true">
+            <mat-icon class="material-symbols-outlined">
+                check_circle
+            </mat-icon>
+            Ok
+        </button>
+        <button mat-button (click)="cancel()">
+            Cancel
+        </button>
+    </div>
+</div>

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 import { ActiveCollectionStore } from '../../../stores/active-collection.store';
 import { Subject } from 'rxjs';
 import { getEquipmentTypeName } from '../../../models/equipment-type';
@@ -17,6 +18,9 @@ interface TableRow {
     id: string;
     name: string;
     description: string | null | undefined;
+    cost: number | null | undefined;
+    benefit: number | null | undefined;
+    benefitCost: number | null | undefined;
     created: Date;
 }
 
@@ -24,6 +28,8 @@ interface TableColumn {
     name: string;
     id: string;
     getValue: (row: TableRow) => any;
+    numberFormat?: string;
+    prefix?: string;
 }
 
 @Component({
@@ -36,7 +42,8 @@ interface TableColumn {
         MatIconModule,
         MatPaginatorModule,
         MatProgressSpinnerModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule
     ],
     templateUrl: './project-list.component.html',
     styleUrl: './project-list.component.scss'
@@ -60,6 +67,9 @@ export class ProjectListComponent {
         { id: 'action', name: '', getValue: (row: TableRow) => null },
         { id: 'name', name: 'Name', getValue: (row: TableRow) => row.name },
         { id: 'description', name: 'Description', getValue: (row: TableRow) => row.description},
+        { id: 'benefit', name: 'Benefit', getValue: (row: TableRow) => row.benefit, numberFormat: '1.0-0', prefix: '$'},
+        { id: 'cost', name: 'Cost', getValue: (row: TableRow) => row.cost, numberFormat: '1.0-0', prefix: '$'},
+        { id: 'benefitCost', name: 'Benefit/Cost', getValue: (row: TableRow) => row.benefitCost, numberFormat: '1.2-2'},
         { id: 'created', name: 'Created', getValue: (row: TableRow) => row.created},
     ];
     public displayedColumns = this.columns.map(item => item.id);
@@ -104,6 +114,9 @@ export class ProjectListComponent {
                     id: item.id,
                     name: item.name,
                     description: item.description,
+                    benefit: item.calc?.benefit,
+                    cost: item.calc?.cost,
+                    benefitCost: item.calc?.benefitCost,
                     created: item.created
                 };
                 rows.push(row);

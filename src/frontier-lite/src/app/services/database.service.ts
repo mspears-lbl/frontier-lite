@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from '../models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from '../analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from '../analysis/models/analysis-project';
+import { ProjectCalcResults } from '../analysis/models/project-calculator';
 
 // declare global {
 //   interface Window {
@@ -65,6 +66,10 @@ export class DatabaseService {
         return window.electronAPI.addProject(params);
     }
 
+    async updateProject(params: UpdateAnalysisProjectParams): Promise<AddRecordResult> {
+        return window.electronAPI.updateProject(params);
+    }
+
     async addProjectThreat(params: AddProjectThreatRequest): Promise<AddRecordResult> {
         return window.electronAPI.addProjectThreat(params);
     }
@@ -91,5 +96,9 @@ export class DatabaseService {
 
     async deleteProject(id: string): Promise<AddRecordResult> {
         return window.electronAPI.deleteProject(id);
+    }
+
+    async updateProjectCalc(projectId: string, calcResults: ProjectCalcResults | null): Promise<{ success: boolean; result?: any; error?: string }> {
+        return window.electronAPI.updateProjectCalc(projectId, calcResults);
     }
 }

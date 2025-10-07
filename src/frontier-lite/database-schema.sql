@@ -133,6 +133,18 @@ create table if not exists project (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+------------------
+-- project_calc --
+------------------
+create table if not exists project_calc (
+    project_id INTEGER NOT NULL unique,
+    cost REAL,
+    benefit REAL,
+    benefit_cost REAL,
+    FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
+);
+
+
 --------------------------
 -- Threat Scenario Type --
 --------------------------

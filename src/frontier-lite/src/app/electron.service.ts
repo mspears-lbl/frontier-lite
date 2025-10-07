@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './analysis/models/analysis-project';
+import { ProjectCalcResults } from './analysis/models/project-calculator';
 
 export interface ElectronAPI {
     sendMessage: (message: any) => void;
@@ -30,6 +31,7 @@ export interface ElectronAPI {
     getProjects: () => Promise<{ success: boolean; data?: AnalysisProject[]; error?: string }>;
     getProject: (id: string) => Promise<{ success: boolean; data?: AnalysisProjectData; error?: string }>;
     addProject: (params: AddAnalysisProjectParams) => Promise<AddRecordResult>;
+    updateProject: (params: UpdateAnalysisProjectParams) => Promise<AddRecordResult>;
     addProjectThreat: (params: AddProjectThreatRequest) => Promise<AddRecordResult>;
     updateProjectThreat: (params: ProjectThreatUpdateParams) => Promise<AddRecordResult>;
     addThreatStrategies: (params: AddProjectThreatStrategyParams[]) => Promise<AddRecordResult>;
@@ -37,6 +39,7 @@ export interface ElectronAPI {
     deleteThreatStrategy: (id: number) => Promise<{ success: boolean; result?: any; error?: string }>;
     deleteProjectThreat: (id: string) => Promise<{ success: boolean; result?: any; error?: string }>;
     deleteProject: (id: string) => Promise<{ success: boolean; result?: any; error?: string }>;
+    updateProjectCalc: (projectId: string, calcResults: ProjectCalcResults | null) => Promise<{ success: boolean; result?: any; error?: string }>;
 }
 
 declare global {

@@ -1,0 +1,34 @@
+.desktop-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+.mobile-content {
+    display: none;
+}
+
+.active-link {
+    background-color: rgba(255, 255, 255, 0.15);
+    font-weight: bold;
+}
+
+@media screen and (max-width: 950px) {
+    .desktop-content {
+        display: none;
+    }
+    .mobile-content {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.mat-mdc-button {
+    font-family: "Open Sans", "Helvetica Neue", sans-serif;
+    font-weight: 600;
+    color: #AAC8FA !important;
+}
+
+.mat-toolbar {
+    background-color: #071B36 !important;
+}

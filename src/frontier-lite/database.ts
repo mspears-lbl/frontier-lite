@@ -5,7 +5,8 @@ import * as fs from 'fs';
 import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
+import { ProjectCalcResults } from './src/app/analysis/models/project-calculator';
 import { ResilienceStrategyType } from './src/app/analysis/models/resilience-strategy';
 
 export class DatabaseService {
@@ -107,7 +108,11 @@ export class DatabaseService {
 
     public getProjects(): AnalysisProject[] {
         const stmt = this.db.prepare(queries['get-projects']);
-        return stmt.all() as AnalysisProject[];
+        const results = stmt.all() as any[];
+        for (let item of results) {
+            item.calc = item.calc ? JSON.parse(item.calc) : undefined;
+        }
+        return results;
     }
 
     public getProject(id: string): AnalysisProjectData {
@@ -154,6 +159,11 @@ export class DatabaseService {
             ...params,
             uuid
         });
+    }
+
+    public updateProject(params: UpdateAnalysisProjectParams): Database.RunResult {
+        const stmt = this.db.prepare(queries['update-project']);
+        return stmt.run(params);
     }
 
     public addProjectThreat(params: AddProjectThreatRequest): Database.RunResult {
@@ -230,6 +240,22 @@ export class DatabaseService {
     public deleteProject(id: string): Database.RunResult {
         const stmt = this.db.prepare(queries['delete-project']);
         return stmt.run({id});
+    }
+
+    public updateProjectCalc(projectId: string, calcResults: ProjectCalcResults | null): Database.RunResult {
+        console.log('update project calc...');
+        console.log(calcResults);
+        if (!calcResults) {
+            const stmt = this.db.prepare(queries['delete-project-calc']);
+            return stmt.run({ projectId });
+        }
+        const stmt = this.db.prepare(queries['upsert-project-calc']);
+        return stmt.run({
+            projectId,
+            cost: calcResults.cost,
+            benefit: calcResults.benefit,
+            benefitCost: calcResults.benefitCost
+        });
     }
 
     public close(): void {

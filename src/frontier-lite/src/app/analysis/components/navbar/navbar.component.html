@@ -1,0 +1,49 @@
+<mat-toolbar class="app-background-primary-20">
+    <mat-toolbar-row>
+        <button mat-icon-button [routerLink]="['/']" class="fg-secondary-light">
+            <mat-icon class="material-symbols-outlined">home</mat-icon>
+        </button>
+
+        <div class="desktop-content">
+            <button mat-button class="fg-secondary-light"
+                [routerLink]="['/equipment']"
+                routerLinkActive="active-link">
+                Equipment
+            </button>
+
+            <button mat-button class="fg-secondary-light"
+            [routerLink]="['/analysis']"
+            routerLinkActive="active-link">
+                Analysis
+            </button>
+
+        </div>
+
+        <div class="mobile-content">
+            <mat-menu #appMenu="matMenu">
+                <ng-template matMenuContent>
+
+                    <button mat-menu-item
+                        [routerLink]="['/equipment']"
+                        routerLinkActive="active-link">
+                        Equipment
+                    </button>
+
+                    <button mat-menu-item
+                    [routerLink]="['/analysis']"
+                    routerLinkActive="active-link">
+                        Analysis
+                    </button>
+
+                </ng-template>
+            </mat-menu>
+            <button mat-button class="app-color-primary-70" [matMenuTriggerFor]="appMenu">
+                <mat-icon class="material-symbols-outlined filled-icon">menu</mat-icon>
+            </button>
+        </div>
+
+        <span class="flex-item"></span>
+
+
+    </mat-toolbar-row>
+</mat-toolbar>

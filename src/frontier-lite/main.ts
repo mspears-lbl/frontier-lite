@@ -3,7 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
+import { ProjectCalcResults } from './src/app/analysis/models/project-calculator';
 
 let mainWindow: BrowserWindow | null = null;
 let dbService: DatabaseService;
@@ -251,6 +252,16 @@ function createWindow(): void {
         }
     });
 
+    ipcMain.handle('db:update-project', (event: IpcMainInvokeEvent, params: UpdateAnalysisProjectParams): AddRecordResult => {
+        try {
+            dbService.updateProject(params);
+            return { success: true };
+        } catch (error) {
+            console.error('Error update project:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
     ipcMain.handle('db:add-project-threat', (event: IpcMainInvokeEvent, params: AddProjectThreatRequest): AddRecordResult => {
         try {
             dbService.addProjectThreat(params);
@@ -327,6 +338,16 @@ function createWindow(): void {
             return { success: true, result };
         } catch (error) {
             console.error('Error deleting project:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    });
+
+    ipcMain.handle('db:update-project-calc', async (event: IpcMainInvokeEvent, projectId: string, calcResults: ProjectCalcResults | null) => {
+        try {
+            const result = dbService.updateProjectCalc(projectId, calcResults);
+            return { success: true, result };
+        } catch (error) {
+            console.error('Error updating project calc:', error);
             return { success: false, error: (error as Error).message };
         }
     });

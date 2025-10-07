@@ -13,6 +13,8 @@ import { NewProjectThreatService } from '../new-project-threat/new-project-threa
 import { CommonModule } from '@angular/common';
 import { ProjectThreatViewComponent } from '../project-threat-view/project-threat-view.component';
 import { ProjectStatsViewComponent } from '../project-stats-view/project-stats-view.component';
+import { EditProjectInfoService } from '../edit-project-info/edit-project-info.service';
+import { AnalysisProjectStore } from '../../stores/projects-store';
 
 @Component({
   selector: 'app-project-analysis-home',
@@ -31,11 +33,15 @@ import { ProjectStatsViewComponent } from '../project-stats-view/project-stats-v
 export class ProjectAnalysisHomeComponent {
     private ngUnSubscribe = new Subject<void>();
     readonly store = inject(ActiveProjectStore);
+    readonly projectListStore = inject(AnalysisProjectStore)
     /** The ID of the selected analysis project */
     private id: string | null | undefined;
     private project: AnalysisProjectData | null | undefined;
     get name(): string | null | undefined {
         return this.project?.name;
+    }
+    get description(): string | null | undefined {
+        return this.project?.description;
     }
     get threats(): ProjectThreat[] {
         return this.project?.threats || [];
@@ -47,7 +53,8 @@ export class ProjectAnalysisHomeComponent {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private newThreatService: NewProjectThreatService
+        private newThreatService: NewProjectThreatService,
+        private editProjectService: EditProjectInfoService
     ) {
         this.watchDataChanges();
     }
@@ -100,5 +107,18 @@ export class ProjectAnalysisHomeComponent {
 
     public getThreatName(threatType: ThreatType): string {
         return getThreatName(threatType);
+    }
+
+    public editProject(): void {
+        if (!this.project) {
+            return;
+        }
+        this.editProjectService.open({ project: this.project })
+            .subscribe((result: boolean) => {
+                if (result) {
+                    this.store.reloadData();
+                    this.projectListStore.loadData();
+                }
+            });
     }
 }

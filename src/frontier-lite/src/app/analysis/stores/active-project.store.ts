@@ -35,6 +35,12 @@ export const ActiveProjectStore = signalStore(
             }
         }
 
+        const updateProjectCalc = async (projectId: string, results: ProjectCalcResults | null | undefined): Promise<any> => {
+            console.log(`🎿 update project calcs...`);
+            console.log(results);
+            return await dbService.updateProjectCalc(projectId, results || null);
+        }
+
         return {
             // setData: (data: AnalysisProject[]) => {
             //     console.log('set the store data to:', data)
@@ -83,6 +89,7 @@ export const ActiveProjectStore = signalStore(
                     const calcs = data
                         ? ProjectCalculator.run(data.threats)
                         : undefined;
+                    await updateProjectCalc(params.projectId, calcs)
                     patchState(store, { data, calcs });
                 }
                 return results;
@@ -100,6 +107,7 @@ export const ActiveProjectStore = signalStore(
                         const calcs = data
                             ? ProjectCalculator.run(data.threats)
                             : undefined;
+                        await updateProjectCalc(current.id, calcs)
                         patchState(store, { data, calcs });
                     }
                 }
@@ -116,6 +124,7 @@ export const ActiveProjectStore = signalStore(
                     const calcs = data
                         ? ProjectCalculator.run(data.threats)
                         : undefined;
+                    await updateProjectCalc(current.id, calcs)
                     patchState(store, { data, calcs });
                 }
                 return results;
@@ -131,6 +140,7 @@ export const ActiveProjectStore = signalStore(
                     const calcs = data
                         ? ProjectCalculator.run(data.threats)
                         : undefined;
+                    await updateProjectCalc(current.id, calcs)
                     patchState(store, { data, calcs });
                 }
                 return results;
@@ -147,6 +157,7 @@ export const ActiveProjectStore = signalStore(
                     const calcs = data
                         ? ProjectCalculator.run(data.threats)
                         : undefined;
+                    await updateProjectCalc(current.id, calcs)
                     patchState(store, { data, calcs });
                 }
                 return results;
@@ -162,6 +173,7 @@ export const ActiveProjectStore = signalStore(
                     const calcs = data
                         ? ProjectCalculator.run(data.threats)
                         : undefined;
+                    await updateProjectCalc(current.id, calcs)
                     patchState(store, { data, calcs });
                 }
                 return results;

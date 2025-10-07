@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams } from './src/app/analysis/models/analysis-project';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
+import { ProjectCalcResults } from './src/app/analysis/models/project-calculator';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   sendMessage: (message: string) => ipcRenderer.send('message', message),
@@ -22,6 +23,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getProjects: () => ipcRenderer.invoke('db:get-projects'),
   getProject: (id: string) => ipcRenderer.invoke('db:get-project', id),
   addProject: (params: AddAnalysisProjectParams) => ipcRenderer.invoke('db:add-project', params),
+  updateProject: (params: UpdateAnalysisProjectParams) => ipcRenderer.invoke('db:update-project', params),
   addProjectThreat: (params: AddProjectThreatRequest) => ipcRenderer.invoke('db:add-project-threat', params),
   updateProjectThreat: (params: ProjectThreatUpdateParams) => ipcRenderer.invoke('db:update-project-threat', params),
   addThreatStrategies: (params: AddProjectThreatStrategyParams[]) => ipcRenderer.invoke('db:add-threat-strategies', params),
@@ -29,4 +31,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   deleteThreatStrategy: (id: number) => ipcRenderer.invoke('db:delete-threat-strategy', id),
   deleteProjectThreat: (id: string) => ipcRenderer.invoke('db:delete-project-threat', id),
   deleteProject: (id: string) => ipcRenderer.invoke('db:delete-project', id),
+  updateProjectCalc: (projectId: string, calcResults: ProjectCalcResults | null) => ipcRenderer.invoke('db:update-project-calc', projectId, calcResults),
 });

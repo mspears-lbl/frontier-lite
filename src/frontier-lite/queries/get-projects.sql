@@ -1,10 +1,18 @@
 select
-    uuid as id,
-    name,
-    description,
-    created_at as "created"
+    p.uuid as id,
+    p.name,
+    p.description,
+    p.created_at as "created",
+    json_object(
+        'cost', c.cost,
+        'benefit', c.benefit,
+        'benefitCost', c.benefit_cost
+    ) as "calc"
 from
-    project
+    project as p
+left join
+    project_calc as c
+    on c.project_id = p.id
 order by
-    created_at desc
+    p.created_at desc
 ;

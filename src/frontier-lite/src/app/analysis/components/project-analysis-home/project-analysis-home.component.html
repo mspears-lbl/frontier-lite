@@ -9,9 +9,25 @@
     Analysis Project
 </h1>
 
-<h2 class="text-center">
-    {{name}}
-</h2>
+<div style="position: relative;" class="app-mb-1 app-ml-1">
+    <button mat-flat-button class="bg-secondary" style="position: absolute; left: 0;"
+    (click)="editProject()">
+        <mat-icon class="material-symbols-outlined">
+            edit
+        </mat-icon>
+        Edit Project Name/Description
+    </button>
+
+    <h2 class="text-center">
+        {{name}}
+    </h2>
+
+</div>
+
+<div class="text-center app-mb-2" style="color: #666; font-style: italic;">
+    {{description}}
+</div>
+
 
 <app-project-stats-view></app-project-stats-view>
 
@@ -19,8 +35,9 @@
     Climate Threats
 </h3>
 
-<div>
-    <button mat-button (click)="addThreat()">
+<div class="app-mb-1 app-ml-1">
+    <button mat-flat-button class="bg-secondary"
+    (click)="addThreat()">
         <mat-icon class="material-symbols-outlined">
             add
         </mat-icon>

@@ -9,6 +9,11 @@ export interface AnalysisProject {
     id: string;
     name: string;
     description?: string | null | undefined;
+    calc?: {
+        cost: number | null | undefined;
+        benefit: number | null | undefined;
+        benefitCost: number | null | undefined;
+    } | null | undefined;
     created: Date;
 }
 
@@ -23,6 +28,12 @@ export function isAddAnalysisProjectParams(value: any): value is AddAnalysisProj
         value.name &&
         typeof value.name === 'string'
     );
+}
+
+export interface UpdateAnalysisProjectParams {
+    id: string;
+    name: string;
+    description?: string | null | undefined;
 }
 
 export interface AddRecordResult {
