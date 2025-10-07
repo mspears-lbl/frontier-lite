@@ -15,7 +15,7 @@
                     <mat-menu #menu="matMenu">
                         <button mat-menu-button [routerLink]="['./edit', element.id]" class="app-border-none app-cursor-pointer button-hover">
                             <div class="flex-item flex-row flex-align-row-items">
-                                <mat-icon class="material-symbols-outlined fg-primary-light app-mr-1">
+                                <mat-icon class="material-symbols-outlined fg-secondary-dark app-mr-1">
                                     edit
                                 </mat-icon>
                                 <span>
@@ -25,7 +25,7 @@
                         </button>
                         <button mat-menu-button (click)="delete(element.id)" class="app-border-none app-cursor-pointer button-hover">
                             <div class="flex-item flex-row flex-align-row-items">
-                                <mat-icon class="material-symbols-outlined fg-error-dark app-mr-1">
+                                <mat-icon class="material-symbols-outlined fg-error app-mr-1">
                                     delete
                                 </mat-icon>
                                 Delete the equipment
@@ -33,7 +33,7 @@
                         </button>
                         <button mat-menu-button (click)="view(element.id)" class="app-border-none app-cursor-pointer button-hover">
                             <div class="flex-item flex-row flex-align-row-items">
-                                <mat-icon class="material-symbols-outlined fg-primary-light app-mr-1">
+                                <mat-icon class="material-symbols-outlined fg-secondary-dark app-mr-1">
                                     map
                                 </mat-icon>
                                 Show the equipment on the map

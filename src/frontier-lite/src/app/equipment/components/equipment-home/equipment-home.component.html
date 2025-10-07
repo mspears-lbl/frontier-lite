@@ -24,7 +24,7 @@
 
 <div class="action-container flex-row">
     @if(form) {
-    <form [formGroup]="form" class="flex-item flex-row">
+    <form [formGroup]="form" class="flex-item flex-row" style="padding-right: 5px;">
         <mat-form-field class="flex-item">
             <mat-label>Equipment Collection</mat-label>
             <mat-select formControlName="activeCollection">
@@ -38,21 +38,21 @@
     </form>
     }
 
-    <button mat-button [routerLink]="['./groups']">
+    <button mat-flat-button class="bg-secondary" [routerLink]="['./groups']">
         <mat-icon class="material-symbols-outlined">
             folder_managed
         </mat-icon>
         Manage Equipment Groups
     </button>
 
-    <button mat-button [routerLink]="['./create']">
+    <button mat-flat-button class="bg-secondary" [routerLink]="['./create']">
         <mat-icon class="material-symbols-outlined">
             add
         </mat-icon>
         Create Equipment
     </button>
 
-    <button mat-button (click)="zoomToAll()">
+    <button mat-flat-button class="bg-secondary" (click)="zoomToAll()">
         <mat-icon class="material-symbols-outlined">
             map
         </mat-icon>
