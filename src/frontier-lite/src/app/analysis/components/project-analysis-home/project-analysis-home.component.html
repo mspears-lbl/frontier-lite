@@ -29,7 +29,22 @@
 </div>
 
 
-<app-project-stats-view></app-project-stats-view>
+@if (threats && threats.length > 0) {
+    <app-project-stats-view></app-project-stats-view>
+} @else {
+    <div class="app-info app-mlr-1">
+        <mat-icon class="material-symbols-outlined">info</mat-icon>
+        <div class="info-content">
+            <h3>Get Started with Your Analysis</h3>
+            <p>To begin your climate resilience analysis, you'll need to:</p>
+            <ol>
+                <li>Add climate threats relevant to your project</li>
+                <li>Add equipment and assets to analyze</li>
+                <li>Define resilience strategies to evaluate</li>
+            </ol>
+        </div>
+    </div>
+}
 
 <h3 class="text-center">
     Climate Threats
@@ -45,6 +60,7 @@
     </button>
 </div>
 
+@if (threats && threats.length > 0) {
 <mat-accordion>
     @for (threat of threats; track threat.id) {
     <mat-expansion-panel>
@@ -75,3 +91,8 @@
     </mat-expansion-panel>
     }
 </mat-accordion>
+} @else {
+    <div class="text-center app-mt-2 text-italic" style="color: #888;">
+        No climate threats added yet. Click "Add a Climate Threat" above to get started.
+    </div>
+}

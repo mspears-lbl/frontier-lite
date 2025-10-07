@@ -1,7 +1,7 @@
 
 :host {
     display: flex;
-    height: calc(100vh - 20px);
+    height: calc(100vh - 84px);
     display: flex;
     flex-direction: column;
     padding: 7px;
@@ -13,16 +13,16 @@
     padding: 16px;
     margin: 16px 0;
     border-radius: 4px;
-    
+
     h3 {
         margin-top: 0;
         color: #1976d2;
     }
-    
+
     ul, ol {
         margin: 8px 0;
     }
-    
+
     li {
         margin: 4px 0;
     }

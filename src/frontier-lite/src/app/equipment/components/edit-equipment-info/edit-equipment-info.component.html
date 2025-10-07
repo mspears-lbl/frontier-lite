@@ -116,7 +116,7 @@
 <!-- } -->
 
 <div class="flex-row flex-center-row-items">
-    <button mat-button [disabled]="!canSave" (click)="save()">
+    <button mat-flat-button [class.bg-secondary]="canSave" [disabled]="!canSave" (click)="save()">
         Save
     </button>
     <button mat-button [routerLink]="['/equipment']">
