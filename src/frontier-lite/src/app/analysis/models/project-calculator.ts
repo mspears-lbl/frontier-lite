@@ -1,10 +1,4 @@
-import { ProjectThreat } from "./analysis-project";
-
-export interface ProjectCalcResults {
-    cost: number;
-    benefit: number;
-    benefitCost: number | null | undefined;
-}
+import { ProjectCalcResults, ProjectThreat } from "./analysis-project";
 
 export class ProjectCalculator {
 

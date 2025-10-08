@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
 import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
-import { ProjectCalcResults } from './src/app/analysis/models/project-calculator';
+import { ProjectCalcResults } from './src/app/analysis/models/analysis-project';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   sendMessage: (message: string) => ipcRenderer.send('message', message),

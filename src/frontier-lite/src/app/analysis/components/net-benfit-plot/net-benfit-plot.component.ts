@@ -1,7 +1,7 @@
 import { Component, effect, ElementRef, inject, ViewChild } from '@angular/core';
 import { ActiveProjectStore } from '../../stores/active-project.store';
 import { AnalysisProjectData } from '../../models/analysis-project';
-import { ProjectCalcResults } from '../../models/project-calculator';
+import { ProjectCalcResults } from '../../models/analysis-project';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NetBenefitCalculator } from '../../models/net-benefit-calculator';
 import { Chart, Colors, LinearScale, LineController, LineElement, PointElement, Tooltip } from 'chart.js'

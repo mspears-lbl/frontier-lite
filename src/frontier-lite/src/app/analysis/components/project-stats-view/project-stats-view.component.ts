@@ -1,7 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { ActiveProjectStore } from '../../stores/active-project.store';
-import { AnalysisProjectData } from '../../models/analysis-project';
-import { ProjectCalcResults } from '../../models/project-calculator';
+import { AnalysisProjectData, ProjectCalcResults } from '../../models/analysis-project';
 import { CommonModule } from '@angular/common';
 import { NetBenefitCalculator } from '../../models/net-benefit-calculator';
 import { NetBenfitPlotComponent } from '../net-benfit-plot/net-benfit-plot.component';

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { EquipmentCollectionStore } from './equipment/stores/equipment-collection.store';
 import { AnalysisProjectStore } from './analysis/stores/projects-store';
 import { NavbarComponent } from './analysis/components/navbar/navbar.component';
+import { StartupAnalysisService } from './analysis/services/startup-analysis.service';
 
 @Component({
     selector: 'app-root',
@@ -17,7 +18,8 @@ import { NavbarComponent } from './analysis/components/navbar/navbar.component';
 export class AppComponent {
 
     readonly store = inject(EquipmentCollectionStore);
-    readonly projectsStore = inject(AnalysisProjectStore)
+    readonly projectsStore = inject(AnalysisProjectStore);
+    readonly startupAnalysisService = inject(StartupAnalysisService);
 
     constructor(
     ) {
@@ -29,6 +31,7 @@ export class AppComponent {
 
     private async loadEquipment() {
         this.store.loadData();
+        await this.startupAnalysisService.analyzeAllProjects();
         this.projectsStore.loadData();
     }
 

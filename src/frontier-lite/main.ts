@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { DatabaseService } from './database';
 import { AddEquipmentParams, Equipment } from './src/app/models/equipment';
 import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
-import { ProjectCalcResults } from './src/app/analysis/models/project-calculator';
+import { ProjectCalcResults } from './src/app/analysis/models/analysis-project';
 
 let mainWindow: BrowserWindow | null = null;
 let dbService: DatabaseService;

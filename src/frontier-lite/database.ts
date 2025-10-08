@@ -5,8 +5,7 @@ import * as fs from 'fs';
 import { v4 } from 'uuid'
 import { AddEquipmentParams, Equipment, EquipmentCollection } from './src/app/models/equipment';
 import queries from './queries';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
-import { ProjectCalcResults } from './src/app/analysis/models/project-calculator';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectCalcResults, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from './src/app/analysis/models/analysis-project';
 import { ResilienceStrategyType } from './src/app/analysis/models/resilience-strategy';
 
 export class DatabaseService {

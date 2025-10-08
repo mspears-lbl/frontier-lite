@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddEquipmentParams, Equipment, EquipmentCollection } from '../models/equipment';
-import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from '../analysis/models/analysis-project';
-import { ProjectCalcResults } from '../analysis/models/project-calculator';
+import { AddAnalysisProjectParams, AddProjectThreatRequest, AddProjectThreatStrategyParams, AddRecordResult, AnalysisProject, AnalysisProjectData, ProjectCalcResults, ProjectThreat, ProjectThreatStrategy, ProjectThreatUpdateParams, UpdateAnalysisProjectParams } from '../analysis/models/analysis-project';
 
 // declare global {
 //   interface Window {

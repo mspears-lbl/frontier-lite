@@ -5,15 +5,18 @@ import { isResilienceCalcInitial, ResilienceCalcInitial } from "./portfolio-calc
 import { isResilienceCalcIntermediate, ResilienceCalcIntermediate } from "./portfolio-calculator/calculator-intermediate";
 import { isResilienceStrategyType, ResilienceStrategyType } from "./resilience-strategy";
 
+export interface ProjectCalcResults {
+    cost: number;
+    benefit: number;
+    benefitCost: number | null | undefined;
+}
+
+
 export interface AnalysisProject {
     id: string;
     name: string;
     description?: string | null | undefined;
-    calc?: {
-        cost: number | null | undefined;
-        benefit: number | null | undefined;
-        benefitCost: number | null | undefined;
-    } | null | undefined;
+    calc?: ProjectCalcResults | null | undefined;
     created: Date;
 }
 
